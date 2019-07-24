@@ -1,2 +1,60 @@
 ---
 # tasks file for ansible-role-vnc-server
+
+- name: Create the VNC user
+  user:
+    name: "{{ username }}"
+
+- name: Install Xfce desktop environment and TigerVNC server
+  package:
+    name:
+      - xfce4
+      - xfce4-goodies
+      - tigervnc-standalone-server
+      - tigervnc-common
+
+- name: Create .vnc directory for VNC user
+  file:
+    path: /home/{{ username }}/.vnc
+    state: directory
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Set VNC password for VNC user
+  shell: echo {{ password }} | vncpasswd -f > /home/{{ username }}/.vnc/passwd
+
+- name: Set correct permissions for VNC passwd file
+  file:
+    path: /home/{{ username }}/.vnc/passwd
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0600
+
+- name: Deploy xstartup configuration file for VNC user
+  copy:
+    src: xstartup
+    dest: /home/{{ username }}/.vnc/
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0744
+
+- name: Set up VNC as a systemd service
+  copy:
+    src: vncserver@.service
+    dest: /lib/systemd/system/
+    mode: 0644
+
+- name: Systemd daemon-reload
+  systemd:
+    daemon_reload: true
+  when:
+    - ansible_service_mgr == "systemd"
+
+- name: Start VNC systemd service and enable it to start on boot
+  systemd:
+    name: "vncserver@1.service"
+    state: started
+    enabled: true
+  when:
+    - ansible_service_mgr == "systemd"
