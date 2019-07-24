@@ -22,7 +22,12 @@
     group: "{{ username }}"
 
 - name: Set VNC password for VNC user
-  shell: echo {{ password }} | vncpasswd -f > /home/{{ username }}/.vnc/passwd
+  shell: |
+    set -o pipefail
+    echo {{ password }} | vncpasswd -f > /home/{{ username }}/.vnc/passwd
+  args:
+    executable: /bin/bash
+    creates: /home/{{ username }}/.vnc/passwd
 
 - name: Set correct permissions for VNC passwd file
   file:
