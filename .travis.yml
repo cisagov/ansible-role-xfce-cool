@@ -5,6 +5,45 @@ python: 3.7
 # pre-commit hooks can use Docker, so we should go ahead and enable it
 services: docker
 
+env:
+  global:
+    - AWS_DEFAULT_REGION="us-east-1"
+    # AWS_ACCESS_KEY_ID
+    - secure: "a9Z7f80fcFQKAXGkDW3YRRUtbxJYKJP+s26BlEDuEoxWQc8Rdlqdkutx\
+    iKX4mXfMcY/B5dDeH8RiY9mFn/sSoM1SV/LwnnrKjCIfWQwkjopDs9UpfBPyzaecM1A\
+    UBmg4w2kW42qMATqk4ZsGK8sFn92gDE/hVW1fdpHiZDtWYJ2m0nR65P3JIJuLR/aKTh\
+    /Vcoot/N8PQr+741g4TWCwwhPd9CPdp7ap8YyiGv/njWDhUV4vTrz2xZ7tWciGpMkhH\
+    qN28P+1UKKhqVfmKqaDgNXHzn+GVUcC6Dnf4UtWxLx4lk277trO2Eks7EItFAkDURny\
+    bS9DIF6mqEuvaTfOqQeWsrQi7hLDPAoy7enfxj1964ra2TKSkJdQWvsYNfETPgPIAib\
+    I0GmsyW5v77MtORGkOJADxgEGVu1XaMQO2+tqScr9XC3CsvpeYW+0V2TV4CMi7F02Vv\
+    2t2d1Q7e2YxGvobm4FBlbHUa92FWOTnJZn43UYGbwmmPnuk6Z943U6lh+rCc8xFu5Qp\
+    PMCc+VzehRpduB0ZylcshnSAW/HK2IfHDgSZQ6cm9cCAaCN0n4Lffdmk52QKrc6/ILl\
+    WH3pF1vi2uybi7CvYxou/DGmMrZonhBXjRiPAmgz+4C+nh6RsYgZRAtFe1vh+hPiljV\
+    LSHRD+ztPOyv0rHveSrc8UTY="
+    # AWS_SECRET_ACCESS_KEY
+    - secure: "AazPelSeZ1V5ZMWPsjPQTh92IQ1F/AT7qyfXGRDpv8xfYH+lDlQyPexC\
+    cSAKyLVIzRGYP0bJJKghLvrehvceKsM/ChktMWoaJiXEotf8Vd8QDf52pN5hUeS/JI8\
+    3mGbvcox4We66YCj15PkHP4ulAdyrV9JHigVFdnjHucY3/ql/WWV6NHI3/lQXrPfUDm\
+    SggYhayDrPSuntXPyc/yHuIy6pNVwsTALgcU4gWgeaHpi8dxaFgf1Vy2S+I3wBZNiCw\
+    U9JKhdapNmNzZMRAAfX4eZB6GH+tzPHZbfCvyT4WGxgYPGbPpYpc9ZezYHiquz5ZWp2\
+    1vrAxqeogCejkKBCjrddRztKLMsLR4YYoWXithBVMx8aQBRmecekYZE+GkzVpjNnDIH\
+    Nyn5I2DbIcFNr4Op1MRb1q8MbAesWKWjCtMsSg3jEfp7ovXZQMnK1Wt54fr5BvlugMv\
+    gpeMsof2Ylthm6Mc2w0vrmravGsZuxeilUBdd6dt6rc9Qs5H2pCbNP+qX3OIPZ8MqcD\
+    UOr0vI44TyRP5gGhzffCimNxTlL5V0apcmsPWmJfPiSBTlCLgmr/iQqGyTcmzVmtv6B\
+    xUlhZIswVyaLgZGoVFLdjyNVN318dgrqVU1XiI4T7neZBPfFSLVIn4sSwi8kHm8/wU4\
+    arbZgCc5cAZ88NrGVVH2A/gk="
+
+# Install terraform and terraform-doc
+before_install:
+  - >
+    wget
+    https://releases.hashicorp.com/terraform/0.12.4/terraform_0.12.4_linux_amd64.zip
+    -O terraform.zip
+  - sudo unzip terraform.zip -d /opt/terraform
+  - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
+  - rm -f terraform.zip
+  - go get github.com/segmentio/terraform-docs
+
 # Cache pip packages and pre-commit plugins to speed up builds
 cache:
   pip: true
