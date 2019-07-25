@@ -45,7 +45,7 @@
     mode: 0744
 
 - name: Set up VNC as a systemd service
-  copy:
+  template:
     src: vncserver@.service
     dest: /lib/systemd/system/
     mode: 0644
