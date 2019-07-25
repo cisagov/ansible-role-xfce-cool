@@ -7,7 +7,6 @@ services: docker
 
 env:
   global:
-    - AWS_DEFAULT_REGION="us-east-1"
     # AWS_ACCESS_KEY_ID
     - secure: "eUDsNa9GR5Wr4qLBADzOXkek7PrCH1aXxkOGT2TiJrJPVEIxSIixDryT\
     rTwl8VsHvwimG41UmmL7WhFWeYYg9Dgt6gOBCMR0OTOR+64imFrIRLOgbEQCy7bqZyV\
@@ -20,6 +19,7 @@ env:
     LTGDjUs6F17S7YqlFNRr4EUj480nebgSL7MHZ6nUr+XR+DU29APbkXllws7aFzkvMD1\
     mqJZYKSP9oVYaUgBCwxrzv9GDqDsO8hRBCjvWrfBvqFc/+zXK9jf96r425+NiDbNKEV\
     V2IH+ji3dzDQjdZ3C+LZquTQ="
+    - AWS_DEFAULT_REGION="us-east-2"
     # AWS_SECRET_ACCESS_KEY
     - secure: "AazPelSeZ1V5ZMWPsjPQTh92IQ1F/AT7qyfXGRDpv8xfYH+lDlQyPexC\
     cSAKyLVIzRGYP0bJJKghLvrehvceKsM/ChktMWoaJiXEotf8Vd8QDf52pN5hUeS/JI8\
