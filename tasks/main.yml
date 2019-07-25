@@ -4,6 +4,7 @@
 - name: Create the VNC user
   user:
     name: "{{ username }}"
+    shell: /bin/bash
 
 - name: Install Xfce desktop environment and TigerVNC server
   package:
