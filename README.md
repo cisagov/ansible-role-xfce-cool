@@ -1,10 +1,10 @@
-# ansible-role-vnc-server #
+# ansible-role-xfce #
 
-[![GitHub Build Status](https://github.com/cisagov/ansible-role-vnc-server/workflows/build/badge.svg)](https://github.com/cisagov/ansible-role-vnc-server/actions)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ansible-role-vnc-server.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-vnc-server/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/ansible-role-vnc-server.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-vnc-server/context:python)
+[![GitHub Build Status](https://github.com/cisagov/ansible-role-xfce/workflows/build/badge.svg)](https://github.com/cisagov/ansible-role-xfce/actions)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce/context:python)
 
-An Ansible role for installing a VNC server.
+An Ansible role for installing the Xfce desktop environment.
 
 ## Requirements ##
 
@@ -27,7 +27,7 @@ Here's how to use it in a playbook:
   become: yes
   become_method: sudo
   roles:
-    - vnc_server
+    - xfce
 ```
 
 ## Contributing ##
@@ -50,4 +50,4 @@ with this waiver of copyright interest.
 
 ## Author Information ##
 
-David Redmin - <david.redmin@trio.dhs.gov>
+Shane Frasier - <jeremy.frasier@trio.dhs.gov>

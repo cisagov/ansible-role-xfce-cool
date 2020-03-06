@@ -1,7 +1,0 @@
----
-# defaults file for ansible-role-vnc-server
-
-# The VNC username
-username: vnc
-# The VNC password
-password: vnc_password

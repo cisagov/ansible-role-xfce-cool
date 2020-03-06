@@ -1,7 +1,6 @@
 ---
 # vars file for RedHat
 
-# The Xfce and TigerVNC package names
+# The Xfce package names
 package_names:
   - '@xfce-desktop-environment'
-  - tigervnc-server
