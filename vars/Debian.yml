@@ -1,0 +1,9 @@
+---
+# vars file for Debian
+
+# The Xfce and TigerVNC package names
+package_names:
+  - xfce4
+  - xfce4-goodies
+  - tigervnc-standalone-server
+  - tigervnc-common
