@@ -1,11 +1,6 @@
 ---
 # tasks file for ansible-role-xfce
 
-- name: Create the VNC user
-  user:
-    name: "{{ username }}"
-    shell: /bin/bash
-
 - name: Load var file with package names based on the OS type
   include_vars: "{{ lookup('first_found', params) }}"
   vars:
@@ -21,63 +16,13 @@
       paths:
         - "vars"
 
-- name: Install Xfce desktop environment and TigerVNC server
+- name: Install Xfce desktop environment
   package:
     name:
       "{{ package_names }}"
 
+# Does this go here?  Can this be generalized?
 - name: Disable screen locking
   file:
     path: /etc/xdg/autostart/light-locker.desktop
     state: absent
-
-- name: Create .vnc directory for VNC user
-  file:
-    path: /home/{{ username }}/.vnc
-    state: directory
-    mode: 0755
-    owner: "{{ username }}"
-    group: "{{ username }}"
-
-- name: Set VNC password for VNC user
-  shell: |
-    set -o pipefail
-    echo {{ password }} | vncpasswd -f > /home/{{ username }}/.vnc/passwd
-  args:
-    executable: /bin/bash
-    creates: /home/{{ username }}/.vnc/passwd
-
-- name: Set correct permissions for VNC passwd file
-  file:
-    path: /home/{{ username }}/.vnc/passwd
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: 0600
-
-- name: Deploy xstartup configuration file for VNC user
-  copy:
-    src: xstartup
-    dest: /home/{{ username }}/.vnc/
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: 0744
-
-- name: Set up VNC as a systemd service
-  template:
-    src: vncserver@.service
-    dest: /lib/systemd/system/
-    mode: 0644
-
-- name: Systemd daemon-reload
-  systemd:
-    daemon_reload: true
-  when:
-    - ansible_service_mgr == "systemd"
-
-- name: Start VNC systemd service and enable it to start on boot
-  systemd:
-    name: "vncserver@1.service"
-    state: started
-    enabled: true
-  when:
-    - ansible_service_mgr == "systemd"

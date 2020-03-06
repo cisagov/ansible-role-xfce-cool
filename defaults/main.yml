@@ -1,7 +1,0 @@
----
-# defaults file for ansible-role-xfce
-
-# The VNC username
-username: vnc
-# The VNC password
-password: vnc_password
