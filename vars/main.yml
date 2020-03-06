@@ -1,7 +1,0 @@
----
-# vars file for ansible-role-vnc-server
-
-# The VNC username
-username: "{{ lookup('aws_ssm', '/vnc/username') }}"
-# The VNC password
-password: "{{ lookup('aws_ssm', '/vnc/password') }}"

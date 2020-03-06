@@ -6,13 +6,30 @@
     name: "{{ username }}"
     shell: /bin/bash
 
+- name: Load var file with package names based on the OS type
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
+        # The OS family and distribution for Kali is "Kali GNU/Linux",
+        # which is not an allowable file name in Linux due to the
+        # slash.  We will allow Kali to fall through and use the
+        # Debian vars file.
+        - Debian.yml
+      paths:
+        - "vars"
+
 - name: Install Xfce desktop environment and TigerVNC server
   package:
     name:
-      - xfce4
-      - xfce4-goodies
-      - tigervnc-standalone-server
-      - tigervnc-common
+      "{{ package_names }}"
+
+- name: Disable screen locking
+  file:
+    path: /etc/xdg/autostart/light-locker.desktop
+    state: absent
 
 - name: Create .vnc directory for VNC user
   file:
@@ -56,11 +73,6 @@
     daemon_reload: true
   when:
     - ansible_service_mgr == "systemd"
-
-- name: Disable screen locking
-  file:
-    path: /etc/xdg/autostart/light-locker.desktop
-    state: absent
 
 - name: Start VNC systemd service and enable it to start on boot
   systemd:
