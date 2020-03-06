@@ -33,7 +33,7 @@ module "iam_user" {
     aws.images-ProvisionParameterStoreReadRoles = aws.images-ProvisionParameterStoreReadRoles
   }
 
-  add_packer_permissions = false
+  add_packer_permissions = true
   images_account_id      = data.aws_caller_identity.images.account_id
   ssm_parameters         = ["/vnc/username", "/vnc/password"]
   user_name              = "test-ansible-role-vnc-server"
