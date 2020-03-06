@@ -3,7 +3,7 @@
 
 - name: Create the VNC user
   user:
-    name: '{{ username }}'
+    name: "{{ username }}"
     shell: /bin/bash
 
 - name: Load var file with package names based on the OS type
@@ -24,7 +24,7 @@
 - name: Install Xfce desktop environment and TigerVNC server
   package:
     name:
-      '{{ package_names }}'
+      "{{ package_names }}"
 
 - name: Disable screen locking
   file:
@@ -36,8 +36,8 @@
     path: /home/{{ username }}/.vnc
     state: directory
     mode: 0755
-    owner: '{{ username }}'
-    group: '{{ username }}'
+    owner: "{{ username }}"
+    group: "{{ username }}"
 
 - name: Set VNC password for VNC user
   shell: |
@@ -50,16 +50,16 @@
 - name: Set correct permissions for VNC passwd file
   file:
     path: /home/{{ username }}/.vnc/passwd
-    owner: '{{ username }}'
-    group: '{{ username }}'
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0600
 
 - name: Deploy xstartup configuration file for VNC user
   copy:
     src: xstartup
     dest: /home/{{ username }}/.vnc/
-    owner: '{{ username }}'
-    group: '{{ username }}'
+    owner: "{{ username }}"
+    group: "{{ username }}"
     mode: 0744
 
 - name: Set up VNC as a systemd service
@@ -72,12 +72,12 @@
   systemd:
     daemon_reload: true
   when:
-    - ansible_service_mgr == 'systemd'
+    - ansible_service_mgr == "systemd"
 
 - name: Start VNC systemd service and enable it to start on boot
   systemd:
-    name: 'vncserver@1.service'
+    name: "vncserver@1.service"
     state: started
     enabled: true
   when:
-    - ansible_service_mgr == 'systemd'
+    - ansible_service_mgr == "systemd"
