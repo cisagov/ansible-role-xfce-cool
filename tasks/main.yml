@@ -6,13 +6,31 @@
     name: "{{ username }}"
     shell: /bin/bash
 
-- name: Install Xfce desktop environment and TigerVNC server
-  package:
-    name:
+- name: Determine Xfce and TigerVNC package names (Debian)
+  set_fact:
+    package_names:
       - xfce4
       - xfce4-goodies
       - tigervnc-standalone-server
       - tigervnc-common
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'Kali GNU/Linux'
+
+- name: Determine Xfce and TigerVNC package names (RedHat)
+  set_fact:
+    package_names:
+      - '@xfce-desktop-environment'
+      - tigervnc-server
+  when: ansible_os_family == 'RedHat'
+
+- name: Install Xfce desktop environment and TigerVNC server
+  package:
+    name:
+      "{{ package_names }}"
+
+- name: Disable screen locking
+  file:
+    path: /etc/xdg/autostart/light-locker.desktop
+    state: absent
 
 - name: Create .vnc directory for VNC user
   file:
@@ -56,11 +74,6 @@
     daemon_reload: true
   when:
     - ansible_service_mgr == "systemd"
-
-- name: Disable screen locking
-  file:
-    path: /etc/xdg/autostart/light-locker.desktop
-    state: absent
 
 - name: Start VNC systemd service and enable it to start on boot
   systemd:
