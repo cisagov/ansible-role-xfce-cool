@@ -1,5 +1,5 @@
 ---
-# tasks file for ansible-role-vnc-server
+# tasks file for ansible-role-xfce
 
 - name: Create the VNC user
   user:

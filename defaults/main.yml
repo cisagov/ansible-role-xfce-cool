@@ -1,5 +1,5 @@
 ---
-# defaults file for ansible-role-vnc-server
+# defaults file for ansible-role-xfce
 
 # The VNC username
 username: vnc
