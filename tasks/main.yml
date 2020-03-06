@@ -15,12 +15,12 @@
       - tigervnc-common
   when: ansible_os_family == 'Debian' or ansible_os_family == 'Kali GNU/Linux'
 
-- name: Determine Xfce and TigerVNC package names (RedHat)
-  set_fact:
-    package_names:
-      - '@xfce-desktop-environment'
-      - tigervnc-server
-  when: ansible_os_family == 'RedHat'
+# - name: Determine Xfce and TigerVNC package names (RedHat)
+#   set_fact:
+#     package_names:
+#       - '@xfce-desktop-environment'
+#       - tigervnc-server
+#   when: ansible_os_family == 'RedHat'
 
 - name: Install Xfce desktop environment and TigerVNC server
   package:

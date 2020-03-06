@@ -6,13 +6,13 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: amazonlinux2_systemd
-    image: geerlingguy/docker-amazonlinux2-ansible:latest
-    privileged: yes
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /lib/systemd/systemd
-    pre_build_image: yes
+  # - name: amazonlinux2_systemd
+  #   image: geerlingguy/docker-amazonlinux2-ansible:latest
+  #   privileged: yes
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   command: /lib/systemd/systemd
+  #   pre_build_image: yes
   - name: debian9_systemd
     image: geerlingguy/docker-debian9-ansible:latest
     privileged: yes
@@ -50,13 +50,13 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     command: /lib/systemd/systemd
     pre_build_image: yes
-  - name: fedora29_systemd
-    image: geerlingguy/docker-fedora29-ansible:latest
-    privileged: yes
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /lib/systemd/systemd
-    pre_build_image: yes
+  # - name: fedora29_systemd
+  #   image: geerlingguy/docker-fedora29-ansible:latest
+  #   privileged: yes
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   command: /lib/systemd/systemd
+  #   pre_build_image: yes
   # Ansible currently insists on installing python2-dnf, which does
   # not exist in Fedora 30.  Until that is resolved, we can't use
   # Fedora 30.
@@ -67,13 +67,15 @@ platforms:
   #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
   #   command: /lib/systemd/systemd
   #   pre_build_image: yes
-  - name: fedora31_systemd
-    image: geerlingguy/docker-fedora31-ansible:latest
-    privileged: yes
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /lib/systemd/systemd
-    pre_build_image: yes
+  # - name: fedora31_systemd
+  #   image: geerlingguy/docker-fedora31-ansible:latest
+  #   privileged: yes
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   command: /lib/systemd/systemd
+  #   pre_build_image: yes
+  - name: kali
+    image: kalilinux/kali-rolling
 provisioner:
   name: ansible
   lint:
