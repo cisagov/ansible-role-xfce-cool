@@ -14,7 +14,7 @@
         # Debian vars file.
         - Debian.yml
       paths:
-        - "vars"
+        - "{{ role_path }}/vars"
 
 - name: Install Xfce desktop environment
   package:
