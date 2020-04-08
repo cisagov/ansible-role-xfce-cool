@@ -1,10 +1,11 @@
-# ansible-role-xfce #
+# cool-ansible-role-xfce #
 
-[![GitHub Build Status](https://github.com/cisagov/ansible-role-xfce/workflows/build/badge.svg)](https://github.com/cisagov/ansible-role-xfce/actions)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce/context:python)
+[![GitHub Build Status](https://github.com/cisagov/cool-ansible-role-xfce/workflows/build/badge.svg)](https://github.com/cisagov/cool-ansible-role-xfce/actions)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/cool-ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/cool-ansible-role-xfce/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/cool-ansible-role-xfce.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/cool-ansible-role-xfce/context:python)
 
-An Ansible role for installing the Xfce desktop environment.
+An Ansible role for installing the Xfce desktop environment and configuring it
+for use in the COOL.
 
 ## Requirements ##
 
