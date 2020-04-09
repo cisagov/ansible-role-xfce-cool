@@ -4,3 +4,4 @@
 # The Xfce package names
 package_names:
   - '@xfce-desktop-environment'
+  - python3-lxml
