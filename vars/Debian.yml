@@ -1,7 +1,8 @@
 ---
 # vars file for Debian
 
-# The Xfce package names
 package_names:
+  - curl
+  - python-lxml
   - xfce4
   - xfce4-goodies

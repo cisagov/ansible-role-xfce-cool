@@ -1,6 +1,7 @@
 ---
 # vars file for Kali
 
-# The Xfce package names
 package_names:
+  - curl
   - kali-desktop-xfce
+  - python-lxml

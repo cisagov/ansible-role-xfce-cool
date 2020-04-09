@@ -19,8 +19,69 @@
     name:
       "{{ package_names }}"
 
-# Does this go here?  Can this be generalized?
 - name: Disable screen locking
   file:
     path: /etc/xdg/autostart/light-locker.desktop
     state: absent
+
+- name: Enable desktop shortcut to /data
+  copy:
+    src: cool-data-shortcut.desktop
+    owner: root
+    mode: '0644'
+    dest: /etc/xdg/autostart/cool-data-shortcut.desktop
+
+- name: Create COOL backgrounds directory
+  file:
+    path: /usr/share/backgrounds/cool
+    owner: root
+    mode: '0755'
+    state: directory
+
+- name: Install COOL background images from cool-system GitHub repository
+  command:
+    chdir: /usr/share/backgrounds/cool
+    cmd: bash -c 'curl -L
+      https://github.com/cisagov/cool-system/archive/develop.tar.gz |
+      tar xvz cool-system-develop/assets/desktops
+      --strip-components=3'
+    creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
+    warn: false # unarchive module is awful, and can't handle this work
+
+- name: Set COOL backgrounds permissions
+  file:
+    mode: u=rwX,g=rX,o=rX
+    owner: root
+    path: /usr/share/backgrounds/cool
+    recurse: yes
+
+- name: Set COOL desktop background
+  xml:
+    path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+    xpath: //property[@name="image-path"]
+    attribute: value
+    value: "/usr/share/backgrounds/cool/cisa_cool_retro_0.png"
+
+- name: Set clock format to UTC
+  xml:
+    path: /etc/xdg/xfce4/panel/default.xml
+    xpath: //property[@name="digital-format"]
+    attribute: value
+    value: "%T %Z"
+
+- name: Install JetBrains Mono typeface
+  command:
+    chdir: /usr/share/fonts/truetype
+    cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
+      https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
+      unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
+      rm /tmp/jetbrains.zip'
+    creates: "/usr/share/fonts/truetype/JetBrainsMono-*"
+    warn: false # unarchive module is awful, and can't handle this work
+  notify: "rebuild font cache"
+
+- name: Set qterminal font
+  lineinfile:
+    path: /etc/xdg/qterminal.org/qterminal.ini
+    regexp: "^fontFamily="
+    line: "fontFamily=JetBrains Mono"
