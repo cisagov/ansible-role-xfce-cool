@@ -4,8 +4,28 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/cisagov/ansible-role-xfce-cool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce-cool/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cisagov/ansible-role-xfce-cool.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cisagov/ansible-role-xfce-cool/context:python)
 
-An Ansible role for installing the Xfce desktop environment and configuring it
-for use in the COOL.
+An Ansible role for installing the [Xfce](https://www.xfce.org/) desktop
+environment and configuring it for use in the COOL.  This role is not meant to
+be generally useful to the community as it has COOL-specific customizations.
+Please see [ansible-role-xfce](https://github.com/cisagov/ansible-role-xfce) if
+you are in need of a more general Xfce role.
+
+Currently this role only supports [Kali Linux](https://www.kali.org/) as it
+makes changes  about the desktop configuration that only exists in the Kali
+distribution.
+
+## What this role does ##
+
+* Install COOL [desktop
+  images](https://github.com/cisagov/cool-system/tree/develop/assets/desktops)
+  from the [cool-system](https://github.com/cisagov/cool-system) repository.
+* Create a desktop shortcut to the shared
+  [`/data`](https://github.com/cisagov/ansible-role-amazon-efs-utils)
+  mountpoint.
+* Install and set the terminal font to
+  [JetBrains Mono](https://www.jetbrains.com/lp/mono/).
+* Configure the clock panel to show the time in
+  [UTC](https://www.timeanddate.com/worldclock/timezone/utc).
 
 ## Requirements ##
 
@@ -51,4 +71,4 @@ with this waiver of copyright interest.
 
 ## Author Information ##
 
-Shane Frasier - <jeremy.frasier@trio.dhs.gov>
+Mark Feldhousen - <mark.feldhousen@trio.dhs.gov>
