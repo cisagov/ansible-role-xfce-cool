@@ -18,18 +18,19 @@ galaxy_info:
         # Debian Testing:
         # https://www.kali.org/docs/policy/kali-linux-relationship-with-debian
         - bullseye
-    - name: Fedora
-      versions:
-        - 29
-        # Ansible currently insists on installing python2-dnf, which
-        # does not exist in Fedora 30.  Until that is resolved, we
-        # can't use Fedora 30.
-        # - 30
-        - 31
-    - name: Ubuntu
-      versions:
-        - bionic
-        - xenial
+    # Kali is the only distribution that has pre-configured desktops
+    # - name: Fedora
+    #   versions:
+    #     - 29
+    #     # Ansible currently insists on installing python2-dnf, which
+    #     # does not exist in Fedora 30.  Until that is resolved, we
+    #     # can't use Fedora 30.
+    #     # - 30
+    #     - 31
+    # - name: Ubuntu
+    #   versions:
+    #     - bionic
+    #     - xenial
   galaxy_tags:
     - xfce
 

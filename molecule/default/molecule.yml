@@ -9,27 +9,30 @@ platforms:
   # Amazon Linux does not appear to offer Xfce
   # - name: amazonlinux2
   #   image: amazonlinux:2
-  - name: debian9
-    image: debian:stretch-slim
-  - name: debian10
-    image: debian:buster-slim
-  - name: debian11
-    image: debian:bullseye-slim
+  # debian* Xfce does not have a desktop configuration
+  # - name: debian9
+  #   image: debian:stretch-slim
+  # - name: debian10
+  #   image: debian:buster-slim
+  # - name: debian11
+  #   image: debian:bullseye-slim
   - name: kali
     image: kalilinux/kali-rolling
-  - name: fedora29
-    image: fedora:29
+  # - name: fedora29
+  #   image: fedora:29
   # Ansible currently insists on installing python2-dnf, which does
   # not exist in Fedora 30.  Until that is resolved, we can't use
   # Fedora 30.
+  # fedora* Xfce does not have a desktop configuration
   # - name: fedora30
   #   image: fedora:30
-  - name: fedora31
-    image: fedora:31
-  - name: ubuntu16
-    image: ubuntu:xenial
-  - name: ubuntu18
-    image: ubuntu:bionic
+  # - name: fedora31
+  #   image: fedora:31
+  # ubuntu* Xfce does not have a desktop configuration
+  # - name: ubuntu16
+  #   image: ubuntu:xenial
+  # - name: ubuntu18
+  #   image: ubuntu:bionic
 provisioner:
   name: ansible
   lint:
