@@ -1,5 +1,5 @@
 ---
-# handlers file for cool-ansible-role-xfce
+# handlers file for ansible-role-xfce-cool
 
 - name: Delete font cache
   file:

@@ -2,4 +2,4 @@
 - name: Converge
   hosts: all
   roles:
-    - role: cool-ansible-role-xfce
+    - role: ansible-role-xfce-cool

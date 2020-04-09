@@ -1,5 +1,5 @@
 ---
-# tasks file for cool-ansible-role-xfce
+# tasks file for ansible-role-xfce-cool
 
 - name: Load var file with package names based on the OS type
   include_vars: "{{ lookup('first_found', params) }}"
