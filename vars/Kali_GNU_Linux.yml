@@ -4,4 +4,4 @@
 package_names:
   - curl
   - kali-desktop-xfce
-  - python-lxml
+  - python3-lxml
