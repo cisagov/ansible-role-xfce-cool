@@ -3,6 +3,6 @@
 
 package_names:
   - curl
-  - python-lxml
+  - python3-lxml
   - xfce4
   - xfce4-goodies
