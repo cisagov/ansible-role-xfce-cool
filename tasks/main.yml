@@ -10,7 +10,7 @@
       paths:
         - "{{ role_path }}/vars"
 
-- name: Install Xfce desktop environment
+- name: Install system packages necessary for the tasks to follow
   package:
     name:
       "{{ package_names }}"

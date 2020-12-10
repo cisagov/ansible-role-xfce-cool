@@ -1,8 +1,5 @@
 ---
-# vars file for Debian
-
+# The names of the packages to install
 package_names:
   - curl
   - python3-lxml
-  - xfce4
-  - xfce4-goodies
