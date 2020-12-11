@@ -69,11 +69,40 @@
     xpath: //property[@name="image-path"]
 
 - name: Set clock format to UTC
-  xml:
-    path: /etc/xdg/xfce4/panel/default.xml
-    xpath: //property[@name="digital-format"]
-    attribute: value
-    value: "%T %Z"
+  block:
+    - name: Check if there is an existing clock format node we can use
+      xml:
+        count: yes
+        path: /etc/xdg/xfce4/panel/default.xml
+        xpath: //property[@name="digital-format"]
+      register: digital_format
+    - name: Modify the existing clock format node, if it exists
+      xml:
+        attribute: value
+        path: /etc/xdg/xfce4/panel/default.xml
+        value: "%T %Z"
+        xpath: //property[@name="digital-format"]
+      when: digital_format.count != 0
+    - name: Create a new clock format node, if necessary
+      block:
+        - name: Add an empty clock format node as a child
+          xml:
+            path: /etc/xdg/xfce4/panel/default.xml
+            # This is potentially destructive
+            set_children:
+              - property
+            xpath: //property[@value="clock"]
+        - name: Add attributes to clock format node
+          xml:
+            attribute: "{{ item.attribute_name }}"
+            path: /etc/xdg/xfce4/panel/default.xml
+            xpath: //property[@value="clock"]/property
+            value: "{{ item.attribute_value }}"
+          loop:
+            - {attribute_name: "name", attribute_value: "digital-format"}
+            - {attribute_name: "type", attribute_value: "string"}
+            - {attribute_name: "value", attribute_value: "%T %Z"}
+      when: digital_format.count == 0
 
 # TODO: Don't use command with bash.  Use shell instead.
 # TODO: Unarchive should be able to handle this
