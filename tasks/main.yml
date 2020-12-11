@@ -30,8 +30,11 @@
         path: /usr/share/backgrounds/cool
         state: directory
 
-    # TODO: Don't use command with bash.  Use shell instead.
-    # TODO: Unarchive should be able to handle this
+    # TODO: Unarchive should be able to handle this.  Even if that
+    # isn't the case, don't use command with bash.  Use shell instead.
+    #
+    # See this issue:
+    # https://github.com/cisagov/ansible-role-xfce-cool/issues/4
     - name: Install COOL background images from cool-system GitHub repository
       command:
         chdir: /usr/share/backgrounds/cool
@@ -113,8 +116,10 @@
       when:
         - digital_format.count == 0
 
-# TODO: Don't use command with bash.  Use shell instead.
-# TODO: Unarchive should be able to handle this
+# TODO: Make these tasks support Debian, Ubuntu, and RedHat as well
+#
+# See this issue:
+# https://github.com/cisagov/ansible-role-xfce-cool/issues/5
 - name: Install fontconfig and add JetBrains Mono typeface
   block:
     - name: Install fontconfig
@@ -122,6 +127,11 @@
         name:
           - fontconfig
 
+    # TODO: Unarchive should be able to handle this.  Even if that
+    # isn't the case, don't use command with bash.  Use shell instead.
+    #
+    # See this issue:
+    # https://github.com/cisagov/ansible-role-xfce-cool/issues/4
     - name: Install JetBrains Mono typeface
       command:
         chdir: /usr/share/fonts/truetype
@@ -135,6 +145,10 @@
   when:
     - ansible_distribution == "Kali"
 
+# TODO: Make these tasks support Debian, Ubuntu, and RedHat as well
+#
+# See this issue:
+# https://github.com/cisagov/ansible-role-xfce-cool/issues/5
 - name: Install and configure qterminal
   block:
     - name: Install qterminal
