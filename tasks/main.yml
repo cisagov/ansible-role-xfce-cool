@@ -17,16 +17,16 @@
 
 - name: Enable desktop shortcut to /data
   copy:
-    src: cool-data-shortcut.desktop
-    owner: root
-    mode: '0644'
     dest: /etc/xdg/autostart/cool-data-shortcut.desktop
+    mode: 0644
+    owner: root
+    src: cool-data-shortcut.desktop
 
 - name: Create COOL backgrounds directory
   file:
-    path: /usr/share/backgrounds/cool
+    mode: 0755
     owner: root
-    mode: '0755'
+    path: /usr/share/backgrounds/cool
     state: directory
 
 # TODO: Don't use command with bash.  Use shell instead.
@@ -119,6 +119,6 @@
 
 - name: Set qterminal font
   lineinfile:
+    line: "fontFamily=JetBrains Mono"
     path: /etc/xdg/qterminal.org/qterminal.ini
     regexp: "^fontFamily="
-    line: "fontFamily=JetBrains Mono"
