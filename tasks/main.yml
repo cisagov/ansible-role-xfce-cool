@@ -115,19 +115,37 @@
 
 # TODO: Don't use command with bash.  Use shell instead.
 # TODO: Unarchive should be able to handle this
-- name: Install JetBrains Mono typeface
-  command:
-    chdir: /usr/share/fonts/truetype
-    cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
-      https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
-      unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
-      rm /tmp/jetbrains.zip'
-    creates: "/usr/share/fonts/truetype/JetBrainsMono-*"
-    warn: false # unarchive module is awful, and can't handle this work
-  notify: "rebuild font cache"
+- name: Install fontconfig and add JetBrains Mono typeface
+  block:
+    - name: Install fontconfig
+      package:
+        name:
+          - fontconfig
 
-- name: Set qterminal font
-  lineinfile:
-    line: "fontFamily=JetBrains Mono"
-    path: /etc/xdg/qterminal.org/qterminal.ini
-    regexp: "^fontFamily="
+    - name: Install JetBrains Mono typeface
+      command:
+        chdir: /usr/share/fonts/truetype
+        cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
+          https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
+          unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
+          rm /tmp/jetbrains.zip'
+        creates: "/usr/share/fonts/truetype/JetBrainsMono-*"
+        warn: false # unarchive module is awful, and can't handle this work
+      notify: "rebuild font cache"
+  when:
+    - ansible_distribution == "Kali"
+
+- name: Install and configure qterminal
+  block:
+    - name: Install qterminal
+      package:
+        name:
+          - qterminal
+
+    - name: Set qterminal font
+      lineinfile:
+        line: fontFamily=JetBrains Mono
+        path: /etc/xdg/qterminal.org/qterminal.ini
+        regexp: ^fontFamily=
+  when:
+    - ansible_distribution == "Kali"
