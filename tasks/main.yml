@@ -15,11 +15,6 @@
     name:
       "{{ package_names }}"
 
-- name: Disable screen locking
-  file:
-    path: /etc/xdg/autostart/light-locker.desktop
-    state: absent
-
 - name: Enable desktop shortcut to /data
   copy:
     src: cool-data-shortcut.desktop
