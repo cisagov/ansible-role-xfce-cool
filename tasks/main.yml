@@ -34,6 +34,8 @@
     mode: '0755'
     state: directory
 
+# TODO: Don't use command with bash.  Use shell instead.
+# TODO: Unarchive should be able to handle this
 - name: Install COOL background images from cool-system GitHub repository
   command:
     chdir: /usr/share/backgrounds/cool
@@ -51,6 +53,19 @@
     path: /usr/share/backgrounds/cool
     recurse: yes
 
+- name: Check if Xfce4 desktop configuration file exists
+  stat:
+    path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+  register: xfce4_desktop_config
+
+- name: Create Xfce4 desktop configuration if necessary
+  copy:
+    dest: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+    mode: 0644
+    owner: root
+    src: xfce4-desktop.xml
+  when: not xfce4_desktop_config.stat.exists
+
 - name: Set COOL desktop background
   xml:
     path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
@@ -65,6 +80,8 @@
     attribute: value
     value: "%T %Z"
 
+# TODO: Don't use command with bash.  Use shell instead.
+# TODO: Unarchive should be able to handle this
 - name: Install JetBrains Mono typeface
   command:
     chdir: /usr/share/fonts/truetype
