@@ -12,34 +12,29 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 ).get_hosts("all")
 
 
-@pytest.mark.parametrize("pkg", ["curl", "python3-lxml"])
-def test_debian_packages(host, pkg):
-    """Test that the appropriate packages were installed on Debian-based OSs other than Debian 9."""
+def test_packages(host):
+    """Test that the appropriate packages were installed."""
+    pkgs = None
     if (
         (
             host.system_info.distribution == "debian"
             and host.system_info.codename != "stretch"
         )
+        or host.system_info.distribution == "fedora"
         or host.system_info.distribution == "kali"
         or host.system_info.distribution == "ubuntu"
     ):
-        assert host.package(pkg).is_installed
-
-
-@pytest.mark.parametrize("pkg", ["curl", "python-lxml"])
-def test_debian_9_packages(host, pkg):
-    """Test that the appropriate packages were installed on Debian 9."""
-    if (
+        pkgs = ["curl", "python3-lxml"]
+    elif (
         host.system_info.distribution == "debian"
         and host.system_info.codename == "stretch"
     ):
-        assert host.package(pkg).is_installed
+        pkgs = ["curl", "python-lxml"]
+    else:
+        # This is an unknown OS, so force the test to fail
+        assert False
 
-
-@pytest.mark.parametrize("pkg", ["python3-lxml"])
-def test_redhat_packages(host, pkg):
-    """Test that the appropriate packages were installed on Fedora."""
-    if host.system_info.distribution == "fedora":
+    for pkg in pkgs:
         assert host.package(pkg).is_installed
 
 
