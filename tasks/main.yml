@@ -28,20 +28,17 @@
         path: /usr/share/backgrounds/cool
         state: directory
 
-    # TODO: Unarchive should be able to handle this.  Even if that
-    # isn't the case, don't use command with bash.  Use shell instead.
-    #
-    # See this issue:
-    # https://github.com/cisagov/ansible-role-xfce-cool/issues/4
     - name: Install COOL background images from cool-system GitHub repository
-      command:
-        chdir: /usr/share/backgrounds/cool
-        cmd: bash -c 'curl -L
-          https://github.com/cisagov/cool-system/archive/develop.tar.gz |
-          tar xvz cool-system-develop/assets/desktops
-          --strip-components=3'
+      # ansible-lint E208 gives an error if we don't specify the mode,
+      # but we definitely don't want to do that here since it will
+      # override the permissions on the files in the archive.
+      unarchive: # noqa 208
         creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
-        warn: false # unarchive module is awful, and can't handle this work
+        dest: /usr/share/backgrounds/cool
+        extra_opts:
+          - --strip-components=3
+        remote_src: yes
+        src: https://github.com/cisagov/cool-system/archive/develop.tar.gz
 
     - name: Set COOL backgrounds permissions
       file:
@@ -135,10 +132,6 @@
         warn: false # unarchive module is awful, and can't handle this work
       notify: "refresh font cache"
 
-# TODO: Make these tasks support Debian, Ubuntu, and RedHat as well
-#
-# See this issue:
-# https://github.com/cisagov/ansible-role-xfce-cool/issues/5
 - name: Install and configure qterminal
   block:
     - name: Install qterminal
@@ -146,10 +139,29 @@
         name:
           - qterminal
 
+    - name: Check if qterminal configuration file exists
+      stat:
+        path: /etc/xdg/qterminal.org/qterminal.ini
+      register: qterminal_config
+
+    - name: Create qterminal configuration if necessary
+      block:
+        - name: Create qterminal configuration directory if necessary
+          file:
+            path: /etc/xdg/qterminal.org
+            mode: 0755
+            state: directory
+
+        - name: Create qterminal configuration file if necessary
+          copy:
+            dest: /etc/xdg/qterminal.org/qterminal.ini
+            mode: 0644
+            src: qterminal.ini
+      when:
+        - not qterminal_config.stat.exists
+
     - name: Set qterminal font
       lineinfile:
         line: fontFamily=JetBrains Mono
         path: /etc/xdg/qterminal.org/qterminal.ini
         regexp: ^fontFamily=
-  when:
-    - ansible_distribution == "Kali"

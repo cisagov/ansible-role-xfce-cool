@@ -49,15 +49,9 @@ def test_redhat_packages(host, pkg):
         "/etc/xdg/autostart/cool-data-shortcut.desktop",
         "/usr/share/backgrounds/cool/cisa_cool_retro_0.png",
         "/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml",
+        "/etc/xdg/qterminal.org/qterminal.ini",
     ],
 )
 def test_files_exist(host, f):
     """Test that the appropriate files were copied over or already existed."""
     assert host.file(f).exists
-
-
-@pytest.mark.parametrize("f", ["/etc/xdg/qterminal.org/qterminal.ini"])
-def test_files_exist_kali(host, f):
-    """Test that the appropriate files were copied over or already existed on Kali."""
-    if host.system_info.distribution == "kali":
-        assert host.file(f).exists
