@@ -3,3 +3,6 @@
 package_names:
   - curl
   - python3-lxml
+
+# The directory where the jetbrains font should be installed
+jetbrains_font_directory: /usr/share/fonts/truetype
