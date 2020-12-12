@@ -65,7 +65,7 @@
           xml:
             attribute: value
             path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-            value: "/usr/share/backgrounds/cool/cisa_cool_retro_0.png"
+            value: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
             xpath: //property[@name="image-path"]
 
 - name: Set clock format to UTC
