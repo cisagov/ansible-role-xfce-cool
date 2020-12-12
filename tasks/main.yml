@@ -18,7 +18,6 @@
   copy:
     dest: /etc/xdg/autostart/cool-data-shortcut.desktop
     mode: 0644
-    owner: root
     src: cool-data-shortcut.desktop
 
 - name: Install COOL background image
@@ -26,7 +25,6 @@
     - name: Create COOL backgrounds directory
       file:
         mode: 0755
-        owner: root
         path: /usr/share/backgrounds/cool
         state: directory
 
@@ -48,7 +46,6 @@
     - name: Set COOL backgrounds permissions
       file:
         mode: u=rwX,g=rX,o=rX
-        owner: root
         path: /usr/share/backgrounds/cool
         recurse: yes
 
@@ -63,7 +60,6 @@
           copy:
             dest: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
             mode: 0644
-            owner: root
             src: xfce4-desktop.xml
           when:
             - not xfce4_desktop_config.stat.exists
