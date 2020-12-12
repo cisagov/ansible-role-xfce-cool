@@ -116,10 +116,6 @@
       when:
         - digital_format.count == 0
 
-# TODO: Make these tasks support Debian, Ubuntu, and RedHat as well
-#
-# See this issue:
-# https://github.com/cisagov/ansible-role-xfce-cool/issues/5
 - name: Install fontconfig and add JetBrains Mono typeface
   block:
     - name: Install fontconfig
@@ -134,16 +130,14 @@
     # https://github.com/cisagov/ansible-role-xfce-cool/issues/4
     - name: Install JetBrains Mono typeface
       command:
-        chdir: /usr/share/fonts/truetype
+        chdir: "{{ jetbrains_font_directory }}"
         cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
           https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
           unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
           rm /tmp/jetbrains.zip'
-        creates: "/usr/share/fonts/truetype/JetBrainsMono-*"
+        creates: "{{ jetbrains_font_directory }}/JetBrainsMono-*"
         warn: false # unarchive module is awful, and can't handle this work
-      notify: "rebuild font cache"
-  when:
-    - ansible_distribution == "Kali"
+      notify: "refresh font cache"
 
 # TODO: Make these tasks support Debian, Ubuntu, and RedHat as well
 #
