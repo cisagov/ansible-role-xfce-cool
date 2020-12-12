@@ -116,20 +116,15 @@
         name:
           - fontconfig
 
-    # TODO: Unarchive should be able to handle this.  Even if that
-    # isn't the case, don't use command with bash.  Use shell instead.
-    #
-    # See this issue:
-    # https://github.com/cisagov/ansible-role-xfce-cool/issues/4
     - name: Install JetBrains Mono typeface
-      command:
-        chdir: "{{ jetbrains_font_directory }}"
-        cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
-          https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
-          unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
-          rm /tmp/jetbrains.zip'
-        creates: "{{ jetbrains_font_directory }}/JetBrainsMono-*"
-        warn: false # unarchive module is awful, and can't handle this work
+      # ansible-lint E208 gives an error if we don't specify the mode,
+      # but we definitely don't want to do that here since it will
+      # override the permissions on the files in the archive.
+      unarchive: # noqa 208
+        creates: /usr/share/fonts/JetBrainsMono-*
+        dest: /usr/share/fonts
+        remote_src: yes
+        src: https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip
       notify: "refresh font cache"
 
 - name: Install and configure qterminal
