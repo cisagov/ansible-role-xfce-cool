@@ -1,87 +1,162 @@
 ---
-# tasks file for ansible-role-xfce-cool
-
 - name: Load var file with package names based on the OS type
   include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
-        # Add regex_replace() filters to remove spaces and slashes. This allows
-        # the OS family/distribution for Kali, "Kali GNU/Linux", to be easily
-        # mapped to a vars file.
-        - "{{ ansible_distribution | regex_replace('[ /]', '_') }}.yml"
-        - "{{ ansible_os_family | regex_replace('[ /]', '_') }}.yml"
+        - "{{ ansible_distribution }}_{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
       paths:
         - "{{ role_path }}/vars"
 
-- name: Install Xfce desktop environment
+- name: Install system packages necessary for the tasks to follow
   package:
-    name:
-      "{{ package_names }}"
+    name: "{{ package_names }}"
 
-- name: Disable screen locking
-  file:
-    path: /etc/xdg/autostart/light-locker.desktop
-    state: absent
-
-- name: Enable desktop shortcut to /data
+- name: Copy desktop shortcut to /data
   copy:
-    src: cool-data-shortcut.desktop
-    owner: root
-    mode: '0644'
     dest: /etc/xdg/autostart/cool-data-shortcut.desktop
+    mode: 0644
+    src: cool-data-shortcut.desktop
 
-- name: Create COOL backgrounds directory
-  file:
-    path: /usr/share/backgrounds/cool
-    owner: root
-    mode: '0755'
-    state: directory
+- name: Install COOL background image
+  block:
+    - name: Create COOL backgrounds directory
+      file:
+        mode: 0755
+        path: /usr/share/backgrounds/cool
+        state: directory
 
-- name: Install COOL background images from cool-system GitHub repository
-  command:
-    chdir: /usr/share/backgrounds/cool
-    cmd: bash -c 'curl -L
-      https://github.com/cisagov/cool-system/archive/develop.tar.gz |
-      tar xvz cool-system-develop/assets/desktops
-      --strip-components=3'
-    creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
-    warn: false # unarchive module is awful, and can't handle this work
+    - name: Install COOL background images from cool-system GitHub repository
+      # ansible-lint E208 gives an error if we don't specify the mode,
+      # but we definitely don't want to do that here since it will
+      # override the permissions on the files in the archive.
+      unarchive: # noqa 208
+        creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
+        dest: /usr/share/backgrounds/cool
+        extra_opts:
+          - --strip-components=3
+        remote_src: yes
+        src: https://github.com/cisagov/cool-system/archive/develop.tar.gz
 
-- name: Set COOL backgrounds permissions
-  file:
-    mode: u=rwX,g=rX,o=rX
-    owner: root
-    path: /usr/share/backgrounds/cool
-    recurse: yes
+    - name: Set COOL backgrounds permissions
+      file:
+        mode: u=rwX,g=rX,o=rX
+        path: /usr/share/backgrounds/cool
+        recurse: yes
 
-- name: Set COOL desktop background
-  xml:
-    path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-    xpath: //property[@name="image-path"]
-    attribute: value
-    value: "/usr/share/backgrounds/cool/cisa_cool_retro_0.png"
+    - name: Configure Xfce4 desktop configuration file
+      block:
+        - name: Check if Xfce4 desktop configuration file exists
+          stat:
+            path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+          register: xfce4_desktop_config
+
+        - name: Create Xfce4 desktop configuration if necessary
+          copy:
+            dest: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+            mode: 0644
+            src: xfce4-desktop.xml
+          when:
+            - not xfce4_desktop_config.stat.exists
+
+        - name: Set COOL desktop background
+          xml:
+            attribute: value
+            path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+            value: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
+            xpath: //property[@name="image-path"]
 
 - name: Set clock format to UTC
-  xml:
-    path: /etc/xdg/xfce4/panel/default.xml
-    xpath: //property[@name="digital-format"]
-    attribute: value
-    value: "%T %Z"
+  block:
+    - name: Check if there is an existing clock format node we can use
+      xml:
+        count: yes
+        path: /etc/xdg/xfce4/panel/default.xml
+        xpath: //property[@name="digital-format"]
+      register: digital_format
 
-- name: Install JetBrains Mono typeface
-  command:
-    chdir: /usr/share/fonts/truetype
-    cmd: bash -c 'curl -L -o /tmp/jetbrains.zip
-      https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip &&
-      unzip -o /tmp/jetbrains.zip "JetBrainsMono-*/ttf/*" &&
-      rm /tmp/jetbrains.zip'
-    creates: "/usr/share/fonts/truetype/JetBrainsMono-*"
-    warn: false # unarchive module is awful, and can't handle this work
-  notify: "rebuild font cache"
+    - name: Modify the existing clock format node, if it exists
+      xml:
+        attribute: value
+        path: /etc/xdg/xfce4/panel/default.xml
+        value: "%T %Z"
+        xpath: //property[@name="digital-format"]
+      when:
+        - digital_format.count != 0
 
-- name: Set qterminal font
-  lineinfile:
-    path: /etc/xdg/qterminal.org/qterminal.ini
-    regexp: "^fontFamily="
-    line: "fontFamily=JetBrains Mono"
+    - name: Create a new clock format node, if necessary
+      block:
+        - name: Add an empty clock format node as a child
+          xml:
+            path: /etc/xdg/xfce4/panel/default.xml
+            # This is potentially destructive
+            set_children:
+              - property
+            xpath: //property[@value="clock"]
+
+        - name: Add attributes to clock format node
+          xml:
+            attribute: "{{ item.attribute_name }}"
+            path: /etc/xdg/xfce4/panel/default.xml
+            xpath: //property[@value="clock"]/property
+            value: "{{ item.attribute_value }}"
+          loop:
+            - {attribute_name: "name", attribute_value: "digital-format"}
+            - {attribute_name: "type", attribute_value: "string"}
+            - {attribute_name: "value", attribute_value: "%T %Z"}
+      when:
+        - digital_format.count == 0
+
+- name: Install fontconfig and add JetBrains Mono typeface
+  block:
+    - name: Install fontconfig
+      package:
+        name:
+          - fontconfig
+
+    - name: Install JetBrains Mono typeface
+      # ansible-lint E208 gives an error if we don't specify the mode,
+      # but we definitely don't want to do that here since it will
+      # override the permissions on the files in the archive.
+      unarchive: # noqa 208
+        creates: /usr/share/fonts/JetBrainsMono-*
+        dest: /usr/share/fonts
+        remote_src: yes
+        src: https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip
+      notify: "refresh font cache"
+
+- name: Install and configure qterminal
+  block:
+    - name: Install qterminal
+      package:
+        name:
+          - qterminal
+
+    - name: Check if qterminal configuration file exists
+      stat:
+        path: /etc/xdg/qterminal.org/qterminal.ini
+      register: qterminal_config
+
+    - name: Create qterminal configuration if necessary
+      block:
+        - name: Create qterminal configuration directory if necessary
+          file:
+            path: /etc/xdg/qterminal.org
+            mode: 0755
+            state: directory
+
+        - name: Create qterminal configuration file if necessary
+          copy:
+            dest: /etc/xdg/qterminal.org/qterminal.ini
+            mode: 0644
+            src: qterminal.ini
+      when:
+        - not qterminal_config.stat.exists
+
+    - name: Set qterminal font
+      lineinfile:
+        line: fontFamily=JetBrains Mono
+        path: /etc/xdg/qterminal.org/qterminal.ini
+        regexp: ^fontFamily=

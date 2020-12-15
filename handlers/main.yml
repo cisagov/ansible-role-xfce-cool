@@ -1,14 +1,5 @@
 ---
-# handlers file for ansible-role-xfce-cool
-
-- name: Delete font cache
-  file:
-    state: absent
-    path: /var/cache/fontconfig
-  listen: "rebuild font cache"
-
-- name: Build font cache
+- name: Refresh font cache
   command:
-    cmd: fc-cache -v
-    creates: /var/cache/fontconfig
-  listen: "rebuild font cache"
+    cmd: fc-cache
+  listen: "refresh font cache"

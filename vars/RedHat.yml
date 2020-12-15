@@ -1,7 +1,5 @@
 ---
-# vars file for RedHat
-
-# The Xfce package names
+# The names of the packages to install
 package_names:
-  - '@xfce-desktop-environment'
+  - curl
   - python3-lxml
