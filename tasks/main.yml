@@ -29,10 +29,7 @@
         state: directory
 
     - name: Install COOL background images from cool-system GitHub repository
-      # ansible-lint E208 gives an error if we don't specify the mode,
-      # but we definitely don't want to do that here since it will
-      # override the permissions on the files in the archive.
-      unarchive: # noqa 208
+      unarchive:
         creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
         dest: /usr/share/backgrounds/cool
         extra_opts:
@@ -117,10 +114,7 @@
           - fontconfig
 
     - name: Install JetBrains Mono typeface
-      # ansible-lint E208 gives an error if we don't specify the mode,
-      # but we definitely don't want to do that here since it will
-      # override the permissions on the files in the archive.
-      unarchive: # noqa 208
+      unarchive:
         creates: /usr/share/fonts/JetBrainsMono-*
         dest: /usr/share/fonts
         remote_src: yes
