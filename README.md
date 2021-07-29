@@ -33,7 +33,8 @@ None.
 
 ## Role Variables ##
 
-None.
+* `install_directory` - the version of the JetBrainsMono font to
+  download from JetBrains/JetBrainsMono.  Defaults to "2.241".
 
 ## Dependencies ##
 
