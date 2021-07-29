@@ -15,13 +15,14 @@ lint: |
   ansible-lint
   flake8
 platforms:
-  - name: amazonlinux2_systemd
-    image: geerlingguy/docker-amazonlinux2-ansible:latest
-    privileged: yes
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /lib/systemd/systemd
-    pre_build_image: yes
+  # Amazon Linux does not appear to offer Xfce
+  # - name: amazonlinux2_systemd
+  #   image: geerlingguy/docker-amazonlinux2-ansible:latest
+  #   privileged: yes
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   command: /lib/systemd/systemd
+  #   pre_build_image: yes
   - name: debian9_systemd
     image: geerlingguy/docker-debian9-ansible:latest
     privileged: yes
@@ -113,3 +114,4 @@ scenario:
   name: default
 verifier:
   name: testinfra
+  directory: ../tests

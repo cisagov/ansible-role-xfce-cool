@@ -1,8 +1,7 @@
 ---
 # This molecule configuration file is suitable for testing Ansible
-# roles that _do not_ require SystemD.  If your Ansible role _does_
-# require SystemD then you should use molecule-with-systemd.yml
-# instead.
+# roles that _do_ require SystemD.  If your Ansible role _does not_
+# require SystemD then you should use molecule-no-systemd.yml instead.
 #
 # Note that the molecule configuration file that is symlinked to
 # molecule.yml is the one that will be used.
@@ -17,17 +16,32 @@ lint: |
   flake8
 platforms:
   # Amazon Linux does not appear to offer Xfce
-  # - name: amazonlinux2
-  #   image: amazonlinux:2
-  - name: fedora32
-    image: fedora:32
-  - name: fedora33
-    image: fedora:33
+  # - name: amazonlinux2_systemd
+  #   image: geerlingguy/docker-amazonlinux2-ansible:latest
+  #   privileged: yes
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   command: /lib/systemd/systemd
+  #   pre_build_image: yes
+  - name: fedora32_systemd
+    image: geerlingguy/docker-fedora32-ansible:latest
+    privileged: yes
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /lib/systemd/systemd
+    pre_build_image: yes
+  - name: fedora33_systemd
+    image: geerlingguy/docker-fedora33-ansible:latest
+    privileged: yes
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /lib/systemd/systemd
+    pre_build_image: yes
 provisioner:
   name: ansible
   inventory:
     host_vars:
-      debian9:
+      debian9_systemd:
         # auto_legacy is still the default behavior until Ansible 2.12
         # is released, but Molecule overrides this and forces the use
         # of auto.
