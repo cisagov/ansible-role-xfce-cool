@@ -41,7 +41,7 @@ def test_packages(host):
 @pytest.mark.parametrize(
     "f",
     [
-        "/etc/xdg/autostart/cool-data-shortcut.desktop",
+        "/etc/systemd/user/create-fileshare-symlink.service",
         "/usr/share/backgrounds/cool/cisa_cool_retro_0.png",
         "/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml",
         "/etc/xdg/qterminal.org/qterminal.ini",
