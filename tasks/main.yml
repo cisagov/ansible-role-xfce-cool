@@ -34,6 +34,7 @@
         dest: /usr/share/backgrounds/cool
         extra_opts:
           - --strip-components=3
+          - "*/assets/desktops"
         remote_src: yes
         src: https://github.com/cisagov/cool-system/archive/develop.tar.gz
 
