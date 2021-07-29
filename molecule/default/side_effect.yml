@@ -1,0 +1,42 @@
+---
+# This is necessary to setup for the test_symlink_exists() test that
+# is run in the verify stage.  Setting up this test user allows to
+# test the contents of the user-mode systemd service deployed by this
+# role.
+- name: Create and configure a test user
+  hosts: all
+  tasks:
+    - name: Create the /share directory
+      ansible.builtin.file:
+        mode: 0644
+        path: /share
+        state: directory
+    - name: Create test user
+      ansible.builtin.user:
+        name: "{{ username }}"
+    - name: Start systemd-logind
+      service:
+        name: systemd-logind
+        state: started
+    # This ensures that the test user has a user-mode systemd session
+    # even when not logged in.
+    - name: Enable linger for test user
+      ansible.builtin.command:
+        argv:
+          - /bin/loginctl
+          - enable-linger
+          - "{{ username }}"
+    - name: >-
+        Enable and start the user-mode systemd service that creates the file
+        share symlink for the test user
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        enabled: yes
+        name: create-fileshare-symlink
+        scope: user
+        state: started
+      become: yes
+      become_user: "{{ username }}"
+  vars:
+    # The username of the test user
+    username: test

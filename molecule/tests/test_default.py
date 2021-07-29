@@ -50,3 +50,17 @@ def test_packages(host):
 def test_files_exist(host, f):
     """Test that the appropriate files were copied over or already existed."""
     assert host.file(f).exists
+
+
+def test_symlink_exists(host):
+    """Test that the file share symlink exists for the test user.
+
+    Note that this test is dependent on the side_effect playbook being
+    run.
+    """
+    f = host.file("/home/test/Desktop/share")
+    assert f.exists
+    assert f.is_symlink
+    assert f.linked_to == "/share"
+    assert f.user == "test"
+    assert f.group == "test"
