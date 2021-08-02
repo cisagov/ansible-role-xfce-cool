@@ -112,6 +112,7 @@ jobs:
         if: env.RUN_TMATE
   test:
     strategy:
+      fail-fast: false
       matrix:
         scenario:
           - debian
