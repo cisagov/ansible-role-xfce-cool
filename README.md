@@ -16,15 +16,15 @@ distribution.
 
 ## What this role does ##
 
-* Install COOL [desktop
+- Install COOL [desktop
   images](https://github.com/cisagov/cool-system/tree/develop/assets/desktops)
   from the [cool-system](https://github.com/cisagov/cool-system) repository.
-* Create a desktop shortcut to the shared
+- Create a desktop shortcut to the shared
   [`/data`](https://github.com/cisagov/ansible-role-amazon-efs-utils)
   mountpoint.
-* Install and set the terminal font to
+- Install and set the terminal font to
   [JetBrains Mono](https://www.jetbrains.com/lp/mono/).
-* Configure the clock panel to show the time in
+- Configure the clock panel to show the time in
   [UTC](https://www.timeanddate.com/worldclock/timezone/utc).
 
 ## Requirements ##
