@@ -1,5 +1,0 @@
----
-# The names of the packages to install
-package_names:
-  - curl
-  - python-lxml
