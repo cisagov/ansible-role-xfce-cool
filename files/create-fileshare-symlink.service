@@ -1,0 +1,13 @@
+[Unit]
+Description=Create file share symlink for %u
+
+[Service]
+Type=oneshot
+# Make sure the Desktop directory exists before creating the symlink
+ExecStartPre=/bin/mkdir --parents %h/Desktop
+ExecStart=/bin/ln --symbolic --no-dereference --force /share %h/Desktop/share
+NoNewPrivileges=true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
