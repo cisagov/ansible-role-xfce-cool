@@ -20,7 +20,6 @@ galaxy_info:
     #     - 2
     - name: Debian
       versions:
-        - stretch
         - buster
         # Kali linux isn't an option here, but it is based on
         # Debian Testing:

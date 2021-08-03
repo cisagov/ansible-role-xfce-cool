@@ -14,11 +14,11 @@
   ansible.builtin.package:
     name: "{{ package_names }}"
 
-- name: Copy desktop shortcut to /data
+- name: Copy user-mode systemd service file for creating file share symlink
   ansible.builtin.copy:
-    dest: /etc/xdg/autostart/cool-data-shortcut.desktop
+    dest: /etc/systemd/user/
     mode: 0644
-    src: cool-data-shortcut.desktop
+    src: create-fileshare-symlink.service
 
 - name: Install COOL background image
   block:

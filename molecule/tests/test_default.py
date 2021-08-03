@@ -41,7 +41,7 @@ def test_packages(host):
 @pytest.mark.parametrize(
     "f",
     [
-        "/etc/xdg/autostart/cool-data-shortcut.desktop",
+        "/etc/systemd/user/create-fileshare-symlink.service",
         "/usr/share/backgrounds/cool/cisa_cool_retro_0.png",
         "/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml",
         "/etc/xdg/qterminal.org/qterminal.ini",
@@ -67,3 +67,17 @@ def test_extra_files_do_not_exist(host, d, count):
 
     """
     assert len(host.file(d).listdir()) == count
+
+
+def test_symlink_exists(host):
+    """Test that the file share symlink exists for the test user.
+
+    Note that this test is dependent on the side_effect playbook being
+    run.
+    """
+    f = host.file("/home/test/Desktop/share")
+    assert f.exists
+    assert f.is_symlink
+    assert f.linked_to == "/share"
+    assert f.user == "test"
+    assert f.group == "test"
