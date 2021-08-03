@@ -118,7 +118,7 @@
         creates: /usr/share/fonts/JetBrainsMono-*
         dest: /usr/share/fonts
         remote_src: yes
-        src: https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip
+        src: https://github.com/JetBrains/JetBrainsMono/releases/download/v{{ jetbrainsmono_version }}/JetBrainsMono-{{ jetbrainsmono_version }}.zip
       notify: "refresh font cache"
 
 - name: Install and configure qterminal
