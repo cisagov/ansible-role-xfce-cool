@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Create a shortcut to the shared data directory
-Exec=/bin/bash -c 'ln -snf /share /home/$USER/Desktop/share'
-NoDisplay=true
-X-GNOME-Autostart-Phase=Initialization
-X-KDE-autostart-phase=1
