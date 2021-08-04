@@ -52,6 +52,23 @@ def test_files_exist(host, f):
     assert host.file(f).exists
 
 
+@pytest.mark.parametrize(
+    "d,count",
+    [
+        # This directory should contain _only_ cisa_cool_retro_0.png.
+        ("/usr/share/backgrounds/cool/", 1),
+    ],
+)
+def test_extra_files_do_not_exist(host, d, count):
+    """Test that undesired files WERE NOT copied over.
+
+    This test was created to ensure that #13 is resolved and stays
+    resolved.
+
+    """
+    assert len(host.file(d).listdir()) == count
+
+
 def test_symlink_exists(host):
     """Test that the file share symlink exists for the test user.
 
