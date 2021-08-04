@@ -34,8 +34,8 @@
         dest: /usr/share/backgrounds/cool
         extra_opts:
           - --strip-components=3
-          - --wildcards
-          - "*/assets/desktops"
+        include:
+          - cool-system-develop/assets/desktops/cisa_cool_retro_0.png
         remote_src: yes
         src: https://github.com/cisagov/cool-system/archive/develop.tar.gz
 
