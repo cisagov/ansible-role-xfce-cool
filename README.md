@@ -35,8 +35,7 @@ None.
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| jetbrainsmono_version | The version of the JetBrainsMono font to
-  download from JetBrains/JetBrainsMono. | `2.241` | No |
+| jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
 
 ## Dependencies ##
 
