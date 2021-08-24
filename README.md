@@ -33,8 +33,9 @@ None.
 
 ## Role Variables ##
 
-- `jetbrainsmono_version` - the version of the JetBrainsMono font to
-  download from JetBrains/JetBrainsMono.  Defaults to "2.241".
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
 
 ## Dependencies ##
 
