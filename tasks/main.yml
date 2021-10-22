@@ -28,22 +28,11 @@
         path: /usr/share/backgrounds/cool
         state: directory
 
-    - name: Install COOL background images from cool-system GitHub repository
-      ansible.builtin.unarchive:
-        creates: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
-        dest: /usr/share/backgrounds/cool
-        extra_opts:
-          - --strip-components=3
-        include:
-          - cool-system-develop/assets/desktops/cisa_cool_retro_0.png
-        remote_src: yes
-        src: https://github.com/cisagov/cool-system/archive/develop.tar.gz
-
-    - name: Set COOL backgrounds permissions
-      ansible.builtin.file:
-        mode: u=rwX,g=rX,o=rX
-        path: /usr/share/backgrounds/cool
-        recurse: yes
+    - name: Install COOL background images
+      ansible.builtin.copy:
+        dest: /usr/share/backgrounds/cool/
+        mode: 0644
+        src: desktops/
 
     - name: Configure Xfce4 desktop configuration file
       block:
