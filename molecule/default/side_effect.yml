@@ -18,6 +18,10 @@
       service:
         name: systemd-logind
         state: started
+    - name: Check linger for test user
+      ansible.builtin.stat:
+        path: /var/lib/systemd/linger/{{ username }}
+      register: test_user_linger
     # This ensures that the test user has a user-mode systemd session
     # even when not logged in.
     - name: Enable linger for test user
@@ -26,6 +30,7 @@
           - /bin/loginctl
           - enable-linger
           - "{{ username }}"
+      when: not test_user_linger.stat.exists
     - name: >-
         Enable and start the user-mode systemd service that creates the file
         share symlink for the test user
