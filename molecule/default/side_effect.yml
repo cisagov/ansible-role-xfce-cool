@@ -15,7 +15,7 @@
       ansible.builtin.user:
         name: "{{ username }}"
     - name: Start systemd-logind
-      service:
+      ansible.builtin.service:
         name: systemd-logind
         state: started
     - name: Check linger for test user
