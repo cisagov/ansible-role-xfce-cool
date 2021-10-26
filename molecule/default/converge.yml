@@ -1,5 +1,7 @@
 ---
 - name: Converge
   hosts: all
-  roles:
-    - role: ansible-role-xfce-cool
+  tasks:
+    - name: Include ansible-role-xfce-cool
+      ansible.builtin.include_role:
+        name: ansible-role-xfce-cool
