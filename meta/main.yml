@@ -4,8 +4,8 @@ galaxy_info:
   description: Ansible role to customize the Xfce desktop environment
   company: CISA Cyber Assessments
   galaxy_tags:
-    - xfce
     - cool
+    - xfce
   license: CC0
   # With the release of version 2.10, Ansible finally correctly
   # identifies Kali Linux as being the Kali distribution of the Debian
