@@ -31,3 +31,21 @@
 
 - name: Import python playbook
   ansible.builtin.import_playbook: python.yml
+
+# This is necessary to setup for installing this Ansible role with the
+# specification that the test user have a user-mode systemd service
+# that creates a symlink to the /share/directory
+- name: Create and configure a test user
+  hosts: all
+  tasks:
+    - name: Create the /share directory
+      ansible.builtin.file:
+        mode: 0644
+        path: /share
+        state: directory
+    - name: Create test user
+      ansible.builtin.user:
+        name: "{{ username }}"
+  vars:
+    # The username of the test user
+    username: test
