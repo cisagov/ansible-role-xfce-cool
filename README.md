@@ -47,7 +47,7 @@ Here's how to use it in a playbook:
   become: yes
   become_method: sudo
   roles:
-    - xfce
+    - xfce_cool
 ```
 
 ## Contributing ##
