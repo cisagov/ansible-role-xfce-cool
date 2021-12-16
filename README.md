@@ -10,10 +10,6 @@ be generally useful to the community as it has COOL-specific customizations.
 Please see [ansible-role-xfce](https://github.com/cisagov/ansible-role-xfce) if
 you are in need of a more general Xfce role.
 
-Currently this role only supports [Kali Linux](https://www.kali.org/) as it
-makes changes  about the desktop configuration that only exists in the Kali
-distribution.
-
 ## What this role does ##
 
 - Install COOL [desktop
