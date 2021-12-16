@@ -36,6 +36,7 @@ None.
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
 | jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
+| usernames | A list of usernames for which a symlink to the COOL file share should be created. | `[]` | No |
 
 ## Dependencies ##
 
