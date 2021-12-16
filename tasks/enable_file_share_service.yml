@@ -4,6 +4,16 @@
     enabled: yes
     name: systemd-logind
     state: started
+- name: >-
+    Add an environment variable necessary to make systemctl --user
+    commands work
+  ansible.builtin.lineinfile:
+    create: yes
+    group: "{{ username }}"
+    line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
+    mode: 0644
+    owner: "{{ username }}"
+    path: /home/{{ username }}/.bashrc
 # This causes the user's user-specific systemd session to start on
 # boot instead of only when that user logs in.  We need the user's
 # session to be active so we can enable the user-mode systemd service,
@@ -24,13 +34,17 @@
     enabled: yes
     name: create-fileshare-symlink
     scope: user
-  become_user: "{{ username }}"
+  become: no
   vars:
     # This is necessary to get around the difficult case where you ssh
     # into a machine as an unprivileged user _and_ become an
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
     ansible_ssh_pipelining: yes
+    # We have to ssh in as the actual user for whom we are enabling
+    # the service.  sshing in as root and becoming the user is not
+    # sufficient to set all the environment variables that we need.
+    ansible_ssh_user: "{{ username }}"
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
 - name: Disable linger for user
@@ -40,13 +54,3 @@
       - disable-linger
       - "{{ username }}"
     removes: /var/lib/systemd/linger/{{ username }}
-- name: >-
-    Add an environment variable necessary to make systemctl --user
-    commands work
-  ansible.builtin.lineinfile:
-    create: yes
-    group: "{{ username }}"
-    line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
-    mode: 0644
-    owner: "{{ username }}"
-    path: /home/{{ username }}/.bashrc
