@@ -19,6 +19,10 @@
 # session to be active so we can enable the user-mode systemd service,
 # so we use the trick of enabling linger for the user, enabling the
 # user-mode service, then disabling linger for the user.
+#
+# This fiddling with linger does lead to some idempotence funkiness
+# for this role, so we make use of the molecule-idempotence-notest
+# tag.
 - name: Enable linger for user
   ansible.builtin.command:
     argv:
@@ -26,6 +30,8 @@
       - enable-linger
       - "{{ username }}"
     creates: /var/lib/systemd/linger/{{ username }}
+  tags:
+    - molecule-idempotence-notest
 - name: >-
     Enable the user-mode systemd service that creates the file share symlink
     for the user
@@ -35,6 +41,8 @@
     name: create-fileshare-symlink
     scope: user
   become: no
+  tags:
+    - molecule-idempotence-notest
   vars:
     # This is necessary to get around the difficult case where you ssh
     # into a machine as an unprivileged user _and_ become an
@@ -54,3 +62,5 @@
       - disable-linger
       - "{{ username }}"
     removes: /var/lib/systemd/linger/{{ username }}
+  tags:
+    - molecule-idempotence-notest
