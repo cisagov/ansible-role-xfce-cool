@@ -34,7 +34,7 @@
 
 # This is necessary to setup for installing this Ansible role with the
 # specification that the test user have a user-mode systemd service
-# that creates a symlink to the /share/directory
+# that creates a symlink to the /share directory.
 - name: Create and configure a test user
   hosts: all
   tasks:
