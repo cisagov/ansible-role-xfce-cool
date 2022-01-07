@@ -1,0 +1,76 @@
+---
+- name: Start and enable systemd-logind
+  service:
+    enabled: yes
+    name: systemd-logind
+    state: started
+- name: >-
+    Add an environment variable necessary to make systemctl --user
+    commands work
+  ansible.builtin.lineinfile:
+    create: yes
+    group: "{{ username }}"
+    line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
+    mode: 0644
+    owner: "{{ username }}"
+    path: /home/{{ username }}/.bashrc
+# This causes the user's user-specific systemd session to start on
+# boot instead of only when that user logs in.  We need the user's
+# session to be active so we can enable the user-mode systemd service,
+# so we use the trick of enabling linger for the user, enabling the
+# user-mode service, then disabling linger for the user.
+#
+# This fiddling with linger does lead to some idempotence funkiness
+# for this role, so we make use of the molecule-idempotence-notest
+# tag for those two tasks.
+#
+# The task that actually enables the user-mode systemd service can
+# succeed when run via Molecule, but as far as I can tell the only way
+# to make this work is to set "become" to "no" and set
+# "ansible_ssh_user" to "{{ username }}".  Unfortunately this
+# configuration cannot work when this role is used to build an AMI,
+# since in that case ssh connects via an AWS-generated ssh key that is
+# only valid for the AMI's default user.  Therefore we take the even
+# more drastic measure of applying the molecule-notest tag to this
+# task.
+#
+# TODO: Figure out a way to make the ansible.builtin.systemd task
+# succeed when run via molecule or when this Ansible role is used to
+# built an AMI.  See #29 for more details.
+- name: Enable linger for user
+  ansible.builtin.command:
+    argv:
+      - /bin/loginctl
+      - enable-linger
+      - "{{ username }}"
+    creates: /var/lib/systemd/linger/{{ username }}
+  tags:
+    - molecule-idempotence-notest
+- name: >-
+    Enable the user-mode systemd service that creates the file share symlink
+    for the user
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: create-fileshare-symlink
+    scope: user
+  become_user: "{{ username }}"
+  tags:
+    - molecule-notest
+  vars:
+    # This is necessary to get around the difficult case where you ssh
+    # into a machine as an unprivileged user _and_ become an
+    # unprivileged user:
+    # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
+    ansible_ssh_pipelining: yes
+# Now that the user-mode service has been enabled we can disable
+# linger for the user.
+- name: Disable linger for user
+  ansible.builtin.command:
+    argv:
+      - /bin/loginctl
+      - disable-linger
+      - "{{ username }}"
+    removes: /var/lib/systemd/linger/{{ username }}
+  tags:
+    - molecule-idempotence-notest

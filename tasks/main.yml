@@ -145,3 +145,11 @@
         line: fontFamily=JetBrains Mono
         path: /etc/xdg/qterminal.org/qterminal.ini
         regexp: ^fontFamily=
+
+- name: >-
+    Enable the user-mode systemd service that creates the file share symlink
+    for the user
+  ansible.builtin.include_tasks: enable_file_share_service.yml
+  loop: "{{ usernames }}"
+  loop_control:
+    loop_var: username

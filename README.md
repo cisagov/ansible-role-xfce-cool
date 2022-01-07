@@ -10,10 +10,6 @@ be generally useful to the community as it has COOL-specific customizations.
 Please see [ansible-role-xfce](https://github.com/cisagov/ansible-role-xfce) if
 you are in need of a more general Xfce role.
 
-Currently this role only supports [Kali Linux](https://www.kali.org/) as it
-makes changes  about the desktop configuration that only exists in the Kali
-distribution.
-
 ## What this role does ##
 
 - Install COOL [desktop
@@ -36,6 +32,7 @@ None.
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
 | jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
+| usernames | A list of usernames for which a symlink to the COOL file share should be created. | `[]` | No |
 
 ## Dependencies ##
 
@@ -50,7 +47,7 @@ Here's how to use it in a playbook:
   become: yes
   become_method: sudo
   roles:
-    - xfce
+    - xfce_cool
 ```
 
 ## Contributing ##
