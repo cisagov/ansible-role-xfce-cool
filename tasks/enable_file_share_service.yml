@@ -22,7 +22,21 @@
 #
 # This fiddling with linger does lead to some idempotence funkiness
 # for this role, so we make use of the molecule-idempotence-notest
-# tag.
+# tag for those two tasks.
+#
+# The task that actually enables the user-mode systemd service can
+# succeed when run via Molecule, but as far as I can tell the only way
+# to make this work is to set "become" to "no" and set
+# "ansible_ssh_user" to "{{ username }}".  Unfortunately this
+# configuration cannot work when this role is used to build an AMI,
+# since in that case ssh connects via an AWS-generated ssh key that is
+# only valid for the AMI's default user.  Therefore we take the even
+# more drastic measure of applying the molecule-notest tag to this
+# task.
+#
+# TODO: Figure out a way to make the ansible.builtin.systemd task
+# succeed when run via molecule or when this Ansible role is used to
+# built an AMI.  See #29 for more details.
 - name: Enable linger for user
   ansible.builtin.command:
     argv:
@@ -40,19 +54,15 @@
     enabled: yes
     name: create-fileshare-symlink
     scope: user
-  become: no
+  become_user: "{{ username }}"
   tags:
-    - molecule-idempotence-notest
+    - molecule-notest
   vars:
     # This is necessary to get around the difficult case where you ssh
     # into a machine as an unprivileged user _and_ become an
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
     ansible_ssh_pipelining: yes
-    # We have to ssh in as the actual user for whom we are enabling
-    # the service.  sshing in as root and becoming the user is not
-    # sufficient to set all the environment variables that we need.
-    ansible_ssh_user: "{{ username }}"
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
 - name: Disable linger for user
