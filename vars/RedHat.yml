@@ -3,7 +3,3 @@
 package_names:
   - curl
   - python3-lxml
-
-# The users for whom a symlink to the COOL file share should be
-# created.
-usernames: []
