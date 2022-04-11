@@ -58,6 +58,22 @@
 
 - name: Set clock format to UTC
   block:
+    # The file /etc/xdg/xfce4/panel/default.xml sometimes contains
+    # comment tags that are closed incorrectly.  In particular, a
+    # comment _must not_ contain the string "--".  See, for instance,
+    # here: https://www.w3.org/TR/REC-xml/#sec-comments
+    #
+    # And yet, in flagrant violation of this prohibition, this file
+    # sometimes contains comment tags that are opened via <!-- and
+    # closed via <!---->.  If left as they are, these incorrectly
+    # closed comment tags break the later tasks that use
+    # community.general.xml.
+    - name: Fix broken comment tags
+      ansible.builtin.replace:
+        path: /etc/xdg/xfce4/panel/default.xml
+        regexp: ^<!---->$
+        replace: -->
+
     - name: Check if there is an existing clock format node we can use
       community.general.xml:
         count: yes
