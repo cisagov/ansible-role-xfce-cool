@@ -29,9 +29,6 @@
 - name: Import upgrade playbook
   ansible.builtin.import_playbook: upgrade.yml
 
-- name: Import python playbook
-  ansible.builtin.import_playbook: python.yml
-
 # This is necessary to setup for installing this Ansible role with the
 # specification that the test user have a user-mode systemd service
 # that creates a symlink to the /share directory.
