@@ -35,7 +35,7 @@ None.
 
 ## Dependencies ##
 
-None.
+- [cisagov/ansible-role-xfce](https://github.com/cisagov/ansible-role-xfce)
 
 ## Example Playbook ##
 
