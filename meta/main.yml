@@ -1,8 +1,11 @@
 ---
+dependencies:
+  - src: https://github.com/cisagov/ansible-role-xfce
+    name: xfce
 galaxy_info:
   author: Mark Feldhousen
-  description: Ansible role to customize the Xfce desktop environment
   company: CISA Cyber Assessments
+  description: Ansible role to customize the Xfce desktop environment
   galaxy_tags:
     - cool
     - xfce
@@ -29,7 +32,6 @@ galaxy_info:
         - bookworm
     - name: Fedora
       versions:
-        - "35"
         - "36"
         - "37"
     - name: Ubuntu
@@ -38,7 +40,3 @@ galaxy_info:
         - focal
         - jammy
   role_name: xfce_cool
-
-dependencies:
-  - src: https://github.com/cisagov/ansible-role-xfce
-    name: xfce
