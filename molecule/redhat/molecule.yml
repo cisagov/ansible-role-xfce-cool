@@ -15,7 +15,8 @@ lint: |
   ansible-lint
   flake8
 platforms:
-  # Amazon Linux does not appear to offer Xfce
+  # Amazon Linux 2023 does not currently offer Xfce
+  # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
   # - cgroupns_mode: host
   #   command: /lib/systemd/systemd
   #   image: geerlingguy/docker-amazonlinux2023-ansible:latest
