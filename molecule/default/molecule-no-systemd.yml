@@ -16,14 +16,11 @@ lint: |
   ansible-lint
   flake8
 platforms:
-  # Amazon Linux does not appear to offer Xfce
-  # - image: amazonlinux:2
-  #   name: amazonlinux2
-  #   platform: amd64
-  - dockerfile: Dockerfile_debian_9.j2
-    image: debian:stretch-slim
-    name: debian9
-    platform: amd64
+  # Amazon Linux 2023 does not currently offer Xfce
+  # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
+  # - image: amazonlinux:2023
+  # name: amazonlinux2023
+  # platform: amd64
   - image: debian:buster-slim
     name: debian10
     platform: amd64
