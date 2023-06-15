@@ -129,8 +129,6 @@
       notify: "refresh font cache"
 
 - name: Install and configure qterminal
-  when:
-    - not qterminal_config.stat.exists
   block:
     - name: Install qterminal
       ansible.builtin.package:
@@ -143,6 +141,8 @@
       register: qterminal_config
 
     - name: Create qterminal configuration if necessary
+      when:
+        - not qterminal_config.stat.exists
       block:
         - name: Create qterminal configuration directory if necessary
           ansible.builtin.file:
