@@ -4,4 +4,4 @@
     cmd: fc-cache
   listen: "refresh font cache"
   register: cmd_out
-  changed_when: cmd_out.rc == 0
+  changed_when: "cmd_out.rc == 0"
