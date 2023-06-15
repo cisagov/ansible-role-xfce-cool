@@ -166,6 +166,6 @@
     Enable the user-mode systemd service that creates the file share symlink
     for the user
   ansible.builtin.include_tasks: enable_file_share_service.yml
-  loop: "{{ usernames }}"
+  loop: "{{ xfce_cool_usernames }}"
   loop_control:
     loop_var: username
