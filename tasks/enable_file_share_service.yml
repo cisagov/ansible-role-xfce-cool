@@ -1,6 +1,6 @@
 ---
 - name: Start and enable systemd-logind
-  ansible.bultin.service:
+  ansible.builtin.service:
     enabled: yes
     name: systemd-logind
     state: started
