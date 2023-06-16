@@ -30,8 +30,8 @@ None.
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
-| usernames | A list of usernames for which a symlink to the COOL file share should be created. | `[]` | No |
+| xfce_cool_jetbrainsmono_version | The version of the JetBrainsMono font to download from JetBrains/JetBrainsMono. | `2.241` | No |
+| xfce_cool_usernames | A list of usernames for which a symlink to the COOL file share should be created. | `[]` | No |
 
 ## Dependencies ##
 
@@ -71,4 +71,4 @@ with this waiver of copyright interest.
 
 ## Author Information ##
 
-Mark Feldhousen - <mark.feldhousen@trio.dhs.gov>
+Mark Feldhousen - <mark.feldhousen@gwe.cisa.dhs.gov>

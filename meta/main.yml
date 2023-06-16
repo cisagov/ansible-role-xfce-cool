@@ -20,9 +20,9 @@ galaxy_info:
   platforms:
     # Amazon Linux 2023 does not currently offer Xfce
     # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
-    # - name: Amazon Linux 2023
+    # - name: Amazon Linux
     #   versions:
-    #     - any
+    #     - "2023"
     - name: Debian
       versions:
         - buster
@@ -30,14 +30,13 @@ galaxy_info:
         - bookworm
     - name: Fedora
       versions:
-        - "36"
         - "37"
+        - "38"
     - name: Kali
       versions:
         - "2023"
     - name: Ubuntu
       versions:
-        - bionic
         - focal
         - jammy
   role_name: xfce_cool

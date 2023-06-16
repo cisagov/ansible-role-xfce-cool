@@ -91,6 +91,8 @@
         - digital_format.count != 0
 
     - name: Create a new clock format node, if necessary
+      when:
+        - digital_format.count == 0
       block:
         - name: Add an empty clock format node as a child
           community.general.xml:
@@ -110,8 +112,6 @@
             - {attribute_name: "name", attribute_value: "digital-format"}
             - {attribute_name: "type", attribute_value: "string"}
             - {attribute_name: "value", attribute_value: "%T %Z"}
-      when:
-        - digital_format.count == 0
 
 - name: Install fontconfig and add JetBrains Mono typeface
   block:
@@ -125,7 +125,7 @@
         creates: /usr/share/fonts/JetBrainsMono-*
         dest: /usr/share/fonts
         remote_src: yes
-        src: https://github.com/JetBrains/JetBrainsMono/releases/download/v{{ jetbrainsmono_version }}/JetBrainsMono-{{ jetbrainsmono_version }}.zip
+        src: https://github.com/JetBrains/JetBrainsMono/releases/download/v{{ xfce_cool_jetbrainsmono_version }}/JetBrainsMono-{{ xfce_cool_jetbrainsmono_version }}.zip
       notify: "refresh font cache"
 
 - name: Install and configure qterminal
@@ -141,6 +141,8 @@
       register: qterminal_config
 
     - name: Create qterminal configuration if necessary
+      when:
+        - not qterminal_config.stat.exists
       block:
         - name: Create qterminal configuration directory if necessary
           ansible.builtin.file:
@@ -153,8 +155,6 @@
             dest: /etc/xdg/qterminal.org/qterminal.ini
             mode: 0644
             src: qterminal.ini
-      when:
-        - not qterminal_config.stat.exists
 
     - name: Set qterminal font
       ansible.builtin.lineinfile:
@@ -166,6 +166,6 @@
     Enable the user-mode systemd service that creates the file share symlink
     for the user
   ansible.builtin.include_tasks: enable_file_share_service.yml
-  loop: "{{ usernames }}"
+  loop: "{{ xfce_cool_usernames }}"
   loop_control:
     loop_var: username

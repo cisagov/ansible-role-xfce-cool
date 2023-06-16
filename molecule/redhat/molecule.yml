@@ -9,11 +9,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint: |
-  set -e
-  yamllint .
-  ansible-lint
-  flake8
 platforms:
   # Amazon Linux 2023 does not currently offer Xfce
   # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
@@ -28,8 +23,8 @@ platforms:
   #     - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - cgroupns_mode: host
     command: /lib/systemd/systemd
-    image: geerlingguy/docker-fedora36-ansible:latest
-    name: fedora36-systemd
+    image: geerlingguy/docker-fedora37-ansible:latest
+    name: fedora37-systemd
     platform: amd64
     pre_build_image: yes
     privileged: yes
@@ -37,8 +32,8 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - cgroupns_mode: host
     command: /lib/systemd/systemd
-    image: geerlingguy/docker-fedora37-ansible:latest
-    name: fedora37-systemd
+    image: geerlingguy/docker-fedora38-ansible:latest
+    name: fedora38-systemd
     platform: amd64
     pre_build_image: yes
     privileged: yes
