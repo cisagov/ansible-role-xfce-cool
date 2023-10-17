@@ -1,5 +1,5 @@
 ---
-- src: https://github.com/cisagov/ansible-role-upgrade
-  name: upgrade
-- src: https://github.com/cisagov/ansible-role-xfce
-  name: xfce
+- name: upgrade
+  src: https://github.com/cisagov/ansible-role-upgrade
+- name: xfce
+  src: https://github.com/cisagov/ansible-role-xfce
