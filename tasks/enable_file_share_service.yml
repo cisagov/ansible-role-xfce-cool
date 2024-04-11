@@ -1,14 +1,14 @@
 ---
 - name: Start and enable systemd-logind
   ansible.builtin.service:
-    enabled: yes
+    enabled: true
     name: systemd-logind
     state: started
 - name: >-
     Add an environment variable necessary to make systemctl --user
     commands work
   ansible.builtin.lineinfile:
-    create: yes
+    create: true
     group: "{{ username }}"
     line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
     mode: 0644
@@ -50,8 +50,8 @@
     Enable the user-mode systemd service that creates the file share symlink
     for the user
   ansible.builtin.systemd:
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true
     name: create-fileshare-symlink
     scope: user
   become: true
@@ -64,7 +64,7 @@
     # into a machine as an unprivileged user _and_ become an
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
-    ansible_ssh_pipelining: yes
+    ansible_ssh_pipelining: true
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
 - name: Disable linger for user

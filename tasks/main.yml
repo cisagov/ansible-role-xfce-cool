@@ -76,7 +76,7 @@
 
     - name: Check if there is an existing clock format node we can use
       community.general.xml:
-        count: yes
+        count: true
         path: /etc/xdg/xfce4/panel/default.xml
         xpath: //property[@name="digital-format"]
       register: digital_format
@@ -124,7 +124,7 @@
       ansible.builtin.unarchive:
         creates: /usr/share/fonts/JetBrainsMono-*
         dest: /usr/share/fonts
-        remote_src: yes
+        remote_src: true
         src: https://github.com/JetBrains/JetBrainsMono/releases/download/v{{ xfce_cool_jetbrainsmono_version }}/JetBrainsMono-{{ xfce_cool_jetbrainsmono_version }}.zip
       notify: "refresh font cache"
 
