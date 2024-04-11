@@ -54,6 +54,8 @@
     enabled: yes
     name: create-fileshare-symlink
     scope: user
+  become: true
+  become_method: ansible.builtin.sudo
   become_user: "{{ username }}"
   tags:
     - molecule-notest
