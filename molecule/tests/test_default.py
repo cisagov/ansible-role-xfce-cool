@@ -15,21 +15,8 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_packages(host):
     """Test that the appropriate packages were installed."""
     pkgs = None
-    if (
-        (
-            host.system_info.distribution == "debian"
-            and host.system_info.codename != "stretch"
-        )
-        or host.system_info.distribution == "fedora"
-        or host.system_info.distribution == "kali"
-        or host.system_info.distribution == "ubuntu"
-    ):
+    if host.system_info.distribution in ["debian", "fedora", "kali", "ubuntu"]:
         pkgs = ["curl", "python3-lxml"]
-    elif (
-        host.system_info.distribution == "debian"
-        and host.system_info.codename == "stretch"
-    ):
-        pkgs = ["curl", "python-lxml"]
     else:
         # This is an unknown OS, so force the test to fail
         assert False
