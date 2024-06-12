@@ -181,7 +181,9 @@ jobs:
           - amd64
           - arm64
         platform:
-          - amazonlinux2023-systemd
+          # Amazon Linux 2023 does not currently offer Xfce:
+          # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
+          # - amazonlinux2023-systemd
           - debian10-systemd
           - debian11-systemd
           - debian12-systemd
