@@ -4,16 +4,16 @@
     enabled: true
     name: systemd-logind
     state: started
-- name: >-
-    Add an environment variable necessary to make systemctl --user
-    commands work
-  ansible.builtin.lineinfile:
-    create: true
-    group: "{{ username }}"
-    line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
-    mode: 0644
-    owner: "{{ username }}"
-    path: /home/{{ username }}/.bashrc
+# - name: >-
+#     Add an environment variable necessary to make systemctl --user
+#     commands work
+#   ansible.builtin.lineinfile:
+#     create: true
+#     group: "{{ username }}"
+#     line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
+#     mode: 0644
+#     owner: "{{ username }}"
+#     path: /home/{{ username }}/.bashrc
 # This causes the user's user-specific systemd session to start on
 # boot instead of only when that user logs in.  We need the user's
 # session to be active so we can enable the user-mode systemd service,
@@ -55,13 +55,14 @@
     name: create-fileshare-symlink
     scope: user
   become: true
-  become_method: ansible.builtin.sudo
+  # become_flags: -H -S -n -i
+  become_method: community.general.sudosu
   become_user: "{{ username }}"
-  tags:
-    - molecule-notest
+  # tags:
+  #   - molecule-notest
   vars:
     # This is necessary to get around the difficult case where you ssh
-    # into a machine as an unprivileged user _and_ become an
+    # into a machine as an unprivileged user _and_ become a different
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
     ansible_ssh_pipelining: true
