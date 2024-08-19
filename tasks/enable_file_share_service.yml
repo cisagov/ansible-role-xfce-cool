@@ -52,7 +52,7 @@
 - name: >-
     Enable the user-mode systemd service that creates the file share symlink
     for the user
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     daemon_reload: true
     enabled: true
     name: create-fileshare-symlink
