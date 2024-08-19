@@ -37,7 +37,17 @@
     name: create-fileshare-symlink
     scope: user
   become: true
-  become_method: ansible.builtin.sudo
+  # Using su (together with sudo, since we are not sshing in as the
+  # root user) to become the user causes an actual systemd session to
+  # be created for the user.  This in turn causes the user's systemd
+  # user services to be started, which we require for our Molecule
+  # tests.
+  #
+  # sudosu also seems to be required for this task on Kali Linux.  If
+  # I use sudo then the task "succeeds" but the service does not
+  # actually get enabled, and if I use su by itself then the task
+  # hangs due to a prompt for credentials.
+  become_method: community.general.sudosu
   become_user: "{{ username }}"
   vars:
     # This is necessary to get around the difficult case where you ssh
