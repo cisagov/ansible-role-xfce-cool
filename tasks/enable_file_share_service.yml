@@ -27,6 +27,7 @@
   # run; otherwise, the task the follows will fail.  See
   # ansible/molecule#2765 for more details.
   changed_when: false
+
 - name: >-
     Enable the user-mode systemd service that creates the file share symlink
     for the user
@@ -44,6 +45,7 @@
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
     ansible_ssh_pipelining: true
+
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
 - name: Disable linger for user
