@@ -44,8 +44,11 @@
       - enable-linger
       - "{{ username }}"
     creates: /var/lib/systemd/linger/{{ username }}
-  tags:
-    - molecule-idempotence-notest
+  # This changed_when is necessary to pass idempotence.  We cannot use
+  # the molecule-idempotence-notest tag here because the command must
+  # run; otherwise, the task the follows will fail.  See
+  # ansible/molecule#2765 for more details.
+  changed_when: false
 - name: >-
     Enable the user-mode systemd service that creates the file share symlink
     for the user
@@ -75,5 +78,8 @@
       - disable-linger
       - "{{ username }}"
     removes: /var/lib/systemd/linger/{{ username }}
-  tags:
-    - molecule-idempotence-notest
+  # This changed_when is necessary to pass idempotence.  We cannot use
+  # the molecule-idempotence-notest tag here because the command must
+  # run; otherwise, the user will needlessly have linger enabled.  See
+  # ansible/molecule#2765 for more details.
+  changed_when: false
