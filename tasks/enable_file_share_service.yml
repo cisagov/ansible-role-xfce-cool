@@ -24,7 +24,7 @@
     creates: /var/lib/systemd/linger/{{ username }}
   # This changed_when is necessary to pass idempotence.  We cannot use
   # the molecule-idempotence-notest tag here because the command must
-  # run; otherwise, the task the follows will fail.  See
+  # run; otherwise, the task that follows will fail.  See
   # ansible/molecule#2765 for more details.
   changed_when: false
 
