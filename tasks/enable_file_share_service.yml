@@ -15,6 +15,9 @@
 # This fiddling with linger does lead to some idempotence funkiness
 # for this role, so we have to make use of changed_when: false for
 # those two tasks.
+#
+# I run this task as root because if I run it as the actual user it
+# fails on Fedora.
 - name: Enable linger for user
   ansible.builtin.command:
     argv:
@@ -58,6 +61,9 @@
 
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
+#
+# I run this task as root because if I run it as the actual user it
+# fails on Fedora.
 - name: Disable linger for user
   ansible.builtin.command:
     argv:
