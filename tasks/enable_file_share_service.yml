@@ -1,7 +1,7 @@
 ---
 # This is required before enabling or disabling linger.
 - name: Start and enable systemd-logind
-  ansible.builtin.service:
+  ansible.builtin.systemd_service:
     enabled: true
     name: systemd-logind
     state: started
