@@ -17,7 +17,7 @@
 # those two tasks.
 #
 # I run this task as root because if I run it as the actual user it
-# fails on Fedora.
+# fails on Fedora, presumably due to SELinux limitations.
 - name: Enable linger for user
   ansible.builtin.command:
     argv:
@@ -40,7 +40,7 @@
     name: create-fileshare-symlink
     scope: user
   become: true
-  # Using su (together with sudo, since we are not sshing in as the
+  # Using su (together with sudo, since we may not be sshing in as the
   # root user) to become the user causes an actual systemd session to
   # be created for the user.  This in turn causes the user's systemd
   # user services to be started, which we require for our Molecule
@@ -63,7 +63,7 @@
 # linger for the user.
 #
 # I run this task as root because if I run it as the actual user it
-# fails on Fedora.
+# fails on Fedora, presumably due to SELinux limitations.
 - name: Disable linger for user
   ansible.builtin.command:
     argv:
