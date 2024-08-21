@@ -56,16 +56,16 @@ def test_extra_files_do_not_exist(host, d, count):
     assert len(host.file(d).listdir()) == count
 
 
-# This test is commented out until #29 is resolved.
-# def test_symlink_exists(host):
-#     """Test that the file share symlink exists for the test user.
-
-#     Note that this test is dependent on the side_effect playbook being
-#     run.
-#     """
-#     f = host.file("/home/test/Desktop/share")
-#     assert f.exists
-#     assert f.is_symlink
-#     assert f.linked_to == "/share"
-#     assert f.user == "test"
-#     assert f.group == "test"
+def test_symlink_exists(host):
+    """Test that the file share symlink exists for the test user."""
+    share_symlink_location = "/home/test/Desktop/share"
+    f = host.file(share_symlink_location)
+    assert f.exists
+    assert f.is_symlink
+    assert f.linked_to == "/share"
+    # f.user and f.group return the user and group, respectively, of the
+    # symlink target.  I have to use stat because I want to actually check the
+    # user and group of the symlink itself.  See
+    # pytest-dev/pytest-testinfra#766 for more details.
+    assert host.check_output("stat --format %%U %s", share_symlink_location) == "test"
+    assert host.check_output("stat --format %%G %s", share_symlink_location) == "test"

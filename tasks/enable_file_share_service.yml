@@ -1,19 +1,23 @@
 ---
+# This is required before enabling or disabling linger.
 - name: Start and enable systemd-logind
-  ansible.builtin.service:
+  ansible.builtin.systemd_service:
     enabled: true
     name: systemd-logind
     state: started
-- name: >-
-    Add an environment variable necessary to make systemctl --user
-    commands work
-  ansible.builtin.lineinfile:
-    create: true
-    group: "{{ username }}"
-    line: export XDG_RUNTIME_DIR=/run/user/$(id --user)
-    mode: 0644
-    owner: "{{ username }}"
-    path: /home/{{ username }}/.bashrc
+
+# Kali Linux, at least, currently has an issue where systemd-logind is
+# not restarted after an update and is left in a non-functional state.
+# This results in an inability to create a user systemd session, which
+# is necessary when interacting with systemd user services, so we
+# force a restart here.
+- name: Restart systemd-logind
+  ansible.builtin.systemd_service:
+    name: systemd-logind
+    state: restarted
+  # This is necessary to preserve idempotence.
+  changed_when: false
+
 # This causes the user's user-specific systemd session to start on
 # boot instead of only when that user logs in.  We need the user's
 # session to be active so we can enable the user-mode systemd service,
@@ -21,22 +25,11 @@
 # user-mode service, then disabling linger for the user.
 #
 # This fiddling with linger does lead to some idempotence funkiness
-# for this role, so we make use of the molecule-idempotence-notest
-# tag for those two tasks.
+# for this role, so we have to make use of changed_when: false for
+# those two tasks.
 #
-# The task that actually enables the user-mode systemd service can
-# succeed when run via Molecule, but as far as I can tell the only way
-# to make this work is to set "become" to "no" and set
-# "ansible_ssh_user" to "{{ username }}".  Unfortunately this
-# configuration cannot work when this role is used to build an AMI,
-# since in that case ssh connects via an AWS-generated ssh key that is
-# only valid for the AMI's default user.  Therefore we take the even
-# more drastic measure of applying the molecule-notest tag to this
-# task.
-#
-# TODO: Figure out a way to make the ansible.builtin.systemd task
-# succeed when run via molecule or when this Ansible role is used to
-# built an AMI.  See #29 for more details.
+# I run this task as root because if I run it as the actual user it
+# fails on Fedora, presumably due to SELinux limitations.
 - name: Enable linger for user
   ansible.builtin.command:
     argv:
@@ -44,29 +37,45 @@
       - enable-linger
       - "{{ username }}"
     creates: /var/lib/systemd/linger/{{ username }}
-  tags:
-    - molecule-idempotence-notest
+  # This changed_when is necessary to pass idempotence.  We cannot use
+  # the molecule-idempotence-notest tag here because the command must
+  # run; otherwise, the task that follows will fail.  See
+  # ansible/molecule#2765 for more details.
+  changed_when: false
+
 - name: >-
     Enable the user-mode systemd service that creates the file share symlink
     for the user
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     daemon_reload: true
     enabled: true
     name: create-fileshare-symlink
     scope: user
   become: true
-  become_method: ansible.builtin.sudo
+  # Using su (together with sudo, since we may not be sshing in as the
+  # root user) to become the user causes an actual systemd session to
+  # be created for the user.  This in turn causes the user's systemd
+  # user services to be started, which we require for our Molecule
+  # tests.
+  #
+  # sudosu also seems to be required for this task on Kali Linux.  If
+  # I use sudo then the task "succeeds" but the service does not
+  # actually get enabled, and if I use su by itself then the task
+  # hangs due to a prompt for credentials.
+  become_method: community.general.sudosu
   become_user: "{{ username }}"
-  tags:
-    - molecule-notest
   vars:
     # This is necessary to get around the difficult case where you ssh
-    # into a machine as an unprivileged user _and_ become an
+    # into a machine as an unprivileged user _and_ become a different
     # unprivileged user:
     # https://docs.ansible.com/ansible/latest/user_guide/become.html#risks-of-becoming-an-unprivileged-user
     ansible_ssh_pipelining: true
+
 # Now that the user-mode service has been enabled we can disable
 # linger for the user.
+#
+# I run this task as root because if I run it as the actual user it
+# fails on Fedora, presumably due to SELinux limitations.
 - name: Disable linger for user
   ansible.builtin.command:
     argv:
@@ -74,5 +83,8 @@
       - disable-linger
       - "{{ username }}"
     removes: /var/lib/systemd/linger/{{ username }}
-  tags:
-    - molecule-idempotence-notest
+  # This changed_when is necessary to pass idempotence.  We cannot use
+  # the molecule-idempotence-notest tag here because the command must
+  # run; otherwise, the user will needlessly have linger enabled.  See
+  # ansible/molecule#2765 for more details.
+  changed_when: false
