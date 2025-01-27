@@ -184,20 +184,6 @@ jobs:
         architecture:
           - amd64
           - arm64
-        exclude:
-          # Starting with version 256 of systemd, the systemd-logind
-          # service does not appear to start up under QEMU.  This is
-          # fatal for this Ansible role.
-          #
-          # We still support these platforms, but we can't test them
-          # until we have native ARM64 runners.  See issue #59 for
-          # more details.
-          - architecture: arm64
-            platform: debian13-systemd
-          - architecture: arm64
-            platform: kali-systemd
-          - architecture: arm64
-            platform: fedora41-systemd
         platform:
           # Amazon Linux 2023 does not currently offer Xfce:
           # https://docs.aws.amazon.com/linux/al2023/release-notes/all-packages-al2023-20230419.html
