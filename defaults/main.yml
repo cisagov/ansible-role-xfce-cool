@@ -1,7 +1,7 @@
 ---
 # The version of the JetBrainsMono font to download from
 # https://github.com/JetBrains/JetBrainsMono
-xfce_cool_jetbrainsmono_version: "2.241"
+xfce_cool_jetbrainsmono_version: "2.304"
 
 # The users for whom a symlink to the COOL file share should be
 # created.
