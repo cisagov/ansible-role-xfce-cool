@@ -109,9 +109,12 @@
             xpath: //property[@value="clock"]/property
             value: "{{ item.attribute_value }}"
           loop:
-            - {attribute_name: "name", attribute_value: "digital-format"}
-            - {attribute_name: "type", attribute_value: "string"}
-            - {attribute_name: "value", attribute_value: "%T %Z"}
+            - attribute_name: name
+              attribute_value: digital-format
+            - attribute_name: type
+              attribute_value: string
+            - attribute_name: value
+              attribute_value: "%T %Z"
 
 - name: Install fontconfig and add JetBrains Mono typeface
   block:
