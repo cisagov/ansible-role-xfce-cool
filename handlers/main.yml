@@ -2,6 +2,6 @@
 - name: Refresh font cache
   ansible.builtin.command:
     cmd: fc-cache
-  listen: "refresh font cache"
+  listen: refresh font cache
   register: cmd_out
   changed_when: cmd_out.rc == 0
