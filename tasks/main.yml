@@ -129,7 +129,7 @@
         dest: /usr/share/fonts
         remote_src: true
         src: https://github.com/JetBrains/JetBrainsMono/releases/download/v{{ xfce_cool_jetbrainsmono_version }}/JetBrainsMono-{{ xfce_cool_jetbrainsmono_version }}.zip
-      notify: "refresh font cache"
+      notify: refresh font cache
 
 - name: Install and configure qterminal
   block:
