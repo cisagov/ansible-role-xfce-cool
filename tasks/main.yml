@@ -17,21 +17,21 @@
 - name: Copy user-mode systemd service file for creating file share symlink
   ansible.builtin.copy:
     dest: /etc/systemd/user/
-    mode: 0644
+    mode: u=rw,g=r,o=r
     src: create-fileshare-symlink.service
 
 - name: Install COOL background image
   block:
     - name: Create COOL backgrounds directory
       ansible.builtin.file:
-        mode: 0755
+        mode: u=rwx,g=rx,o=rx
         path: /usr/share/backgrounds/cool
         state: directory
 
     - name: Install COOL background images
       ansible.builtin.copy:
         dest: /usr/share/backgrounds/cool/
-        mode: 0644
+        mode: u=rw,g=r,o=r
         src: desktops/
 
     - name: Configure Xfce4 desktop configuration file
@@ -44,7 +44,7 @@
         - name: Create Xfce4 desktop configuration if necessary
           ansible.builtin.copy:
             dest: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-            mode: 0644
+            mode: u=rw,g=r,o=r
             src: xfce4-desktop.xml
           when:
             - not xfce4_desktop_config.stat.exists
@@ -147,13 +147,13 @@
         - name: Create qterminal configuration directory if necessary
           ansible.builtin.file:
             path: /etc/xdg/qterminal.org
-            mode: 0755
+            mode: u=rwx,g=rx,o=rx
             state: directory
 
         - name: Create qterminal configuration file if necessary
           ansible.builtin.copy:
             dest: /etc/xdg/qterminal.org/qterminal.ini
-            mode: 0644
+            mode: u=rw,g=r,o=r
             src: qterminal.ini
 
     - name: Set qterminal font

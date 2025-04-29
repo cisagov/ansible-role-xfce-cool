@@ -52,7 +52,7 @@
   tasks:
     - name: Create the /share directory
       ansible.builtin.file:
-        mode: 0644
+        mode: u=rw,g=r,o=r
         path: /share
         state: directory
     - name: Create test user
