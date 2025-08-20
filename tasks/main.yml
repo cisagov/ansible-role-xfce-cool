@@ -55,8 +55,8 @@
             xpath: >-
               //property[@name="screen0"]/property[@name="monitorVNC-0" and
               @type="empty"]/property[@name="workspace0" and
-              @type="empty"]/property[@name="{{ item.name }}"
-              and @type="{{ item.type }}" and @value="{{ item.value }}"]
+              @type="empty"]/property[@name="{{ item.name }}" and
+              @type="{{ item.type }}" and @value="{{ item.value }}"]
           loop:
             - name: image-style
               type: int
