@@ -70,6 +70,8 @@
             attribute: value
             path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
             value: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
+            # Tags with the last-image name should only appear within
+            # a monitor tag.
             xpath: //property[@name="last-image"]
 
 - name: Set clock format to UTC
