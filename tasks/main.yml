@@ -49,12 +49,30 @@
           when:
             - not xfce4_desktop_config.stat.exists
 
-        - name: Set COOL desktop background
+        - name: Add monitorVNC-0 and its subproperties
+          community.general.xml:
+            path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+            xpath: >-
+              //property[@name="screen0"]/property[@name="monitorVNC-0" and
+              @type="empty"]/property[@name="workspace0" and
+              @type="empty"]/property[@name="{{ item.name }}" and
+              @type="{{ item.type }}" and @value="{{ item.value }}"]
+          loop:
+            - name: image-style
+              type: int
+              value: 5
+            - name: last-image
+              type: string
+              value: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
+
+        - name: Set COOL desktop background for all pre-existing monitors
           community.general.xml:
             attribute: value
             path: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
             value: /usr/share/backgrounds/cool/cisa_cool_retro_0.png
-            xpath: //property[@name="image-path"]
+            # Tags with the last-image name should only appear within
+            # a monitor tag.
+            xpath: //property[@name="last-image"]
 
 - name: Set clock format to UTC
   block:
