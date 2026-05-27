@@ -19,7 +19,7 @@ def test_packages(host):
         pkgs = ["curl", "python3-lxml"]
     else:
         # This is an unknown OS, so force the test to fail
-        assert False
+        raise ValueError(f"Unknown distribution {host.system_info.distribution}.")
 
     for pkg in pkgs:
         assert host.package(pkg).is_installed
